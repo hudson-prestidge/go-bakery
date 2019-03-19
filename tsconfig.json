@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "module": "system",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "outFile": "client/static/main.js",
+        "sourceMap": true
+    },
+    "include": [
+        "client/*.ts"
+    ],
+    "exclude": [
+    ]
+}

@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-  fs := http.FileServer(http.Dir("../client"))
+  fs := http.FileServer(http.Dir("../client/static"))
   http.Handle("/", fs)
 
   log.Println("Listening on port 3000")

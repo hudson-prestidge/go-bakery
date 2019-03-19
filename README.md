@@ -7,7 +7,6 @@ using
   GO
   typescript
   sass
-  templating(thinking pug)  
   mysql?
 (lodash or underscore or similar?)
 to show I can work with different technologies!
