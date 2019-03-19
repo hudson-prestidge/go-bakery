@@ -3,5 +3,3 @@ const sayHi = function greeter(person: string) {
 }
 
 let user = "Jane User"
-
-document.querySelector('.super-great').textContent = sayHi(user)

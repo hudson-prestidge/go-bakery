@@ -1,5 +1,130 @@
-.super-great {
-  color: #333;
+* {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+body {
+  background-color: #3E92CC;
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+header {
+  background-color: #2A628F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  height: 15%;
+  width: 100%;
+}
+
+footer {
+  background-color: #2A628F;
+  height: 5%;
+  min-height: 2em;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+}
+
+aside {
+  min-height: 90%;
+  width: 30%;
+  padding: 1.5em;
+  border: 0.1em solid black;
+  border-radius: 10px;
+  font-size: 1.5em;
+}
+
+.product-area {
+  width: 70%;
+  border: 1px solid red;
+  height: 90%;
+  border-radius: 10px;
+  font-size: 0;
+}
+
+.product-window {
+  display: inline-block;
+  border: 1px solid yellow;
+  height: 50%;
+  width: 50%;
+  margin: 0;
+}
+
+.disclaimer {
+  position: absolute;
+  left: 0.5em;
+}
+
+.trademark {
+  position: absolute;
+  right: 0.5em;
+}
+
+.container {
+  height: 80%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 15%;
+  bottom: 5%;
+  overflow-y: auto;
+}
+
+.nav-links {
+  position: absolute;
+  left: 1em;
+}
+
+.title-area {
+  height: 90%;
+  border: 0.1em solid black;
+  padding: 0 0.5em;
+  border-radius: 5px;
+}
+
+.main-title {
+  margin: 0.5em;
+  display: inline;
+}
+
+.shopping-cart-link {
+  position: absolute;
+  right: 1em;
+  top: 1em;
+  font-size: 3em;
+}
+
+#face-logo {
+  height: 60%;
+  top: 20%;
+  position: relative;
+  display: inline;
+}
+
+#auth-buttons {
+  position: absolute;
+  right: 1em;
+  top: 1em;
+}
+
+@media (max-height: 750px) {
+  header {
+    height: 7em;
+  }
+
+  .container {
+    top: 7em;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */
