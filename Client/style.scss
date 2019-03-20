@@ -49,6 +49,36 @@ aside {
   font-size: 1.5em;
 }
 
+.team-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 33%;
+  height: 100%;
+  border: 1px solid green;
+  text-align: center;
+}
+
+.team-member-name {
+  margin-top: 10%;
+}
+
+.team-member-picture {
+  margin: 10% 0;
+  height: 30%;
+  width: 40%;
+  border: 1px solid purple;
+}
+
+.team-member-description {
+  margin: 0 20%;
+  width: 60%;
+}
+
+.gap {
+  width: 0.5%;
+}
+
 .product-area {
   width: 70%;
   border: 1px solid red;
@@ -66,13 +96,16 @@ aside {
 }
 
 .disclaimer {
-  position: absolute;
-  left: 0.5em;
+  padding-left: 0.5em;
+  font-size: 0.7em;
+  width: 50%;
 }
 
 .trademark {
-  position: absolute;
-  right: 0.5em;
+  font-size: 0.7em;
+  width: 50%;
+  text-align: right;
+  padding-right: 0.5em;
 }
 
 .container {
