@@ -64,8 +64,8 @@ aside {
   border: 1px solid purple;
 }
 
-.team-member-description {
-  margin: 0 20%;
+.team-member-description, .team-member-likes, .team-member-dislikes {
+  margin: 2% 20%;
   width: 60%;
 }
 
@@ -73,7 +73,7 @@ aside {
   width: 0.5%;
 }
 
-.product-area {
+.product-area-med {
   width: 70%;
   border: 1px solid red;
   height: 90%;
