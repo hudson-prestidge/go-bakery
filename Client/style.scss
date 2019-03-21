@@ -4,6 +4,8 @@ $secondary-background: #2A628F;
 $header-height: 15%;
 $footer-height: 5%;
 
+$fs: 15px;
+
 * {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -11,6 +13,7 @@ $footer-height: 5%;
 }
 
 body {
+  font-size: $fs;
   background-color: $primary-background;
   margin: 0;
   height: 100vh;
@@ -75,9 +78,16 @@ aside {
   width: 60%;
 }
 
-
 .gap {
   width: 0.5%;
+}
+
+.product-area-lrg {
+  width: 100%;
+  border: 1px solid red;
+  height: 90%;
+  border-radius: 10px;
+  font-size: 0;
 }
 
 .product-area-med {
@@ -94,6 +104,10 @@ aside {
   height: 50%;
   width: 50%;
   margin: 0;
+}
+
+.product-data {
+  font-size: $fs;
 }
 
 .disclaimer {

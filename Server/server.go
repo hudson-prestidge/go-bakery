@@ -11,8 +11,8 @@ func main() {
   handler := db.GetProducts()
   mux.HandleFunc("/api/v1/products", handler)
   fs := http.FileServer(http.Dir("../client/static"))
-  http.Handle("/", fs)
-
+  mux.Handle("/", fs)
+  
   log.Println("Listening on port 3000")
   http.ListenAndServe(":3000", mux)
 }

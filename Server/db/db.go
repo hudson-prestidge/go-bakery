@@ -5,7 +5,13 @@ import(
   "database/sql"
   _ "github.com/lib/pq"
   "net/http"
+  "encoding/json"
 )
+
+type Product struct {
+  Id int
+  Name string
+}
 
 func GetProducts() http.HandlerFunc {
   return func(w http.ResponseWriter, r *http.Request){
@@ -22,15 +28,23 @@ func GetProducts() http.HandlerFunc {
     if err != nil {
       log.Fatal(err)
     }
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusCreated)
+    var data []Product
     defer rows.Close()
     for rows.Next() {
       err := rows.Scan(&id, &name)
       if err != nil {
         log.Fatal(err)
       }
-      // w.Write([]byte("" + name))
-      log.Print(name)
+      p := Product{Id: id, Name: name}
+      data = append(data, p)
     }
+    js, err := json.Marshal(data)
+    if err != nil {
+      log.Fatal(err)
+    }
+    w.Write(js)
     defer db.Close()
   }
 }

@@ -4,11 +4,10 @@
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-        "outFile": "client/static/main.js",
         "sourceMap": true
     },
     "include": [
-        "client/*.ts"
+        "client/static/scripts/*.ts"
     ],
     "exclude": [
     ]
