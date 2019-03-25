@@ -8,8 +8,6 @@ body {
   font-size: 15px;
   background-color: #3E92CC;
   margin: 0;
-  height: 100vh;
-  width: 100vw;
 }
 
 header {
@@ -19,14 +17,13 @@ header {
   justify-content: center;
   position: fixed;
   top: 0;
-  height: 15%;
+  height: 15vh;
   width: 100%;
 }
 
 footer {
   background-color: #2A628F;
-  height: 5%;
-  min-height: 2em;
+  height: 5vh;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -36,10 +33,11 @@ footer {
 }
 
 aside {
-  min-height: 90%;
+  height: 100%;
   width: 30%;
   padding: 1.5em;
   border: 0.1em solid black;
+  display: inline-block;
   border-radius: 10px;
   font-size: 1.5em;
 }
@@ -61,6 +59,7 @@ aside {
 .team-member-picture {
   margin: 10% 0;
   height: 30%;
+  min-height: 13.2vw;
   width: 40%;
   border: 1px solid purple;
 }
@@ -77,25 +76,30 @@ aside {
 .product-area-lrg {
   width: 100%;
   border: 1px solid red;
-  height: 90%;
+  height: 100%;
   border-radius: 10px;
   font-size: 0;
 }
 
 .product-area-med {
-  width: 70%;
   border: 1px solid red;
-  height: 90%;
+  height: 100%;
+  width: 69%;
   border-radius: 10px;
   font-size: 0;
 }
 
 .product-window {
   display: inline-block;
+  text-align: center;
   border: 1px solid yellow;
   height: 50%;
   width: 50%;
   margin: 0;
+}
+
+.product-img {
+  height: 100%;
 }
 
 .product-data {
@@ -103,12 +107,14 @@ aside {
 }
 
 .disclaimer {
+  margin: 0;
   padding-left: 0.5em;
   font-size: 0.7em;
   width: 50%;
 }
 
 .trademark {
+  margin: 0;
   font-size: 0.7em;
   width: 50%;
   text-align: right;
@@ -116,14 +122,11 @@ aside {
 }
 
 .container {
-  height: 80%;
-  width: 100%;
   display: flex;
-  align-items: center;
-  position: absolute;
-  top: 15%;
-  bottom: 5%;
-  overflow-y: auto;
+  height: 75vh;
+  width: 100%;
+  margin-top: 17vh;
+  margin-bottom: 7vh;
 }
 
 .nav-links {
@@ -169,7 +172,12 @@ aside {
   }
 
   .container {
-    top: 7em;
+    margin-top: 7em;
+    margin-bottom: 2em;
+  }
+
+  footer {
+    height: 2em;
   }
 }
 
