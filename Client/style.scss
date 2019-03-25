@@ -82,14 +82,12 @@ aside {
 
 .product-area-lrg {
   width: 100%;
-  border: 1px solid red;
   height: 100%;
   border-radius: 10px;
   font-size: 0;
 }
 
 .product-area-med {
-  border: 1px solid red;
   height: 100%;
   width: 69%;
   border-radius: 10px;
@@ -97,16 +95,30 @@ aside {
 }
 
 .product-window {
+  position: relative;
   display: inline-block;
   text-align: center;
-  border: 1px solid yellow;
   height: 50%;
   width: 50%;
   margin: 0;
+  overflow: hidden;
+}
+
+.product-window:hover {
+  border: 1px solid #13293D;
 }
 
 .product-img {
+  width: 100%;
   height: 100%;
+}
+
+.add-product-button {
+  animation-fill-mode: forwards;
+  transform: translateY(100%);
+  position: absolute;
+  bottom: 0%;
+  right: 20%;
 }
 
 .product-data {
@@ -179,6 +191,27 @@ aside {
 #login-btn {
 }
 
+@keyframes slideIn {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(100%);
+  }
+}
+
+
 @media (max-height: 750px) {
   header {
     height: 7em;
@@ -200,6 +233,10 @@ aside {
   }
 
   aside {
+    width: 100%;
+  }
+
+  .product-area-med {
     width: 100%;
   }
 

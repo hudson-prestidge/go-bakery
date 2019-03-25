@@ -1,14 +1,14 @@
 window.addEventListener('load', function (e) {
     getProducts();
 });
-var getProducts = function () {
-    var getProd = new XMLHttpRequest();
+const getProducts = function () {
+    const getProd = new XMLHttpRequest();
     getProd.open('GET', '/api/v1/products');
     getProd.onload = function () {
-        var data = JSON.parse(this.response);
-        var windows = document.querySelectorAll('.product-data');
-        for (var i = 0; i < data.length; i++) {
-            windows[i].textContent = data[i].Id + ": " + data[i].Name;
+        const data = JSON.parse(this.response);
+        const windows = document.querySelectorAll('.product-data');
+        for (let i = 0; i < data.length; i++) {
+            windows[i].textContent = `${data[i].Id}: ${data[i].Name}`;
         }
     };
     getProd.onerror = function (err) {
