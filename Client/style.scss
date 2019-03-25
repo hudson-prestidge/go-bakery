@@ -41,9 +41,8 @@ footer {
 }
 
 aside {
-  height: 100%;
+  padding: 0.5em;
   width: 30%;
-  padding: 1.5em;
   border: 0.1em solid black;
   display: inline-block;
   border-radius: 10px;
@@ -131,7 +130,7 @@ aside {
 
 .container {
   display: flex;
-  height: 75vh;
+  height: 74vh;
   width: 100%;
   margin-top: 17vh;
   margin-bottom: 7vh;
@@ -192,5 +191,23 @@ aside {
 
   footer {
     height: 2em;
+  }
+}
+
+@media (max-width: 800px) {
+  .container {
+    flex-direction: column;
+  }
+
+  aside {
+    width: 100%;
+  }
+
+  .product-window {
+    width: 100%;
+  }
+
+  .nav-links a {
+    display: block;
   }
 }
