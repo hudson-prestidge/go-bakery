@@ -35,10 +35,17 @@ footer {
 aside {
   padding: 0.5em;
   width: 30%;
-  border: 0.1em solid black;
+  border: 0.1em solid #13293D;
   display: inline-block;
   border-radius: 10px;
   font-size: 1.5em;
+}
+
+.shameless-plug {
+  margin: 10%;
+  font-size: 1.5em;
+  text-align: center;
+  line-height: 2em;
 }
 
 .team-profile {
