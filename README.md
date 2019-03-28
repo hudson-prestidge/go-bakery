@@ -16,9 +16,10 @@ Relevant Database Schema:
 
 
 Products table{
-  id SERIAL PRIMARY KEY
-  name VARCHAR(50) UNIQUE
-  image VARCHAR
+  id SERIAL PRIMARY KEY NOT NULL
+  name VARCHAR(50) UNIQUE NOT NULL
+  image_name VARCHAR NOT NULL
+  price INTEGER NOT NULL
 }
 
 To add:
@@ -48,3 +49,8 @@ RGB: 19, 41, 61
 RGB: 22, 50, 79
 #18435A
 RGB: 24, 67, 90
+
+External dependencies:
+
+"github.com/lib/pq"
+"github.com/golang-migrate/migrate"
