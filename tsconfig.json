@@ -5,10 +5,11 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "sourceMap": true,
-        "target": "es6"
+        "target": "es6",
+        "outDir": "./client/static/scripts"
     },
     "include": [
-        "client/static/scripts/*.ts"
+        "client/*.ts"
     ],
     "exclude": [
     ]
