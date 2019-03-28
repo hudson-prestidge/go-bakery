@@ -19,6 +19,7 @@ header {
   top: 0;
   height: 15vh;
   width: 100%;
+  z-index: 1;
 }
 
 footer {
@@ -98,7 +99,7 @@ aside {
   position: relative;
   display: inline-block;
   text-align: center;
-  height: 50%;
+  height: 38vh;
   width: 50%;
   margin: 0;
   overflow: hidden;
@@ -142,7 +143,6 @@ aside {
 
 .container {
   display: flex;
-  height: 74vh;
   width: 100%;
   margin-top: 17vh;
   margin-bottom: 7vh;
@@ -185,6 +185,14 @@ aside {
   top: 1em;
 }
 
+.sliding-in {
+  animation: "slideIn" 500ms forwards;
+}
+
+.sliding-out {
+  animation: "slideOut" 500ms forwards;
+}
+
 @keyframes slideIn {
   from {
     transform: translateY(100%);
@@ -225,7 +233,7 @@ aside {
   }
 
   .product-area-med {
-    width: 100%;
+    margin: 0 15%;
   }
 
   .product-window {

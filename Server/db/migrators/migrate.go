@@ -23,7 +23,7 @@ func main() {
     log.Fatal("could not start sql migration, %v", err)
   }
   m, err := migrate.NewWithDatabaseInstance(
-    "file://migrations",
+    "file://../migrations",
     "postgres", driver)
   if err != nil {
     log.Fatal("could not start sql migration, %v", err)

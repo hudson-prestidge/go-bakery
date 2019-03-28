@@ -3,10 +3,12 @@ window.addEventListener('load', function (e) {
     products.forEach(function (product) {
         let addButton = product.querySelector('.add-product-button');
         product.addEventListener('mouseenter', function (e) {
-            addButton.style.animation = 'slideIn 500ms forwards';
+            addButton.classList.add('sliding-in');
+            addButton.classList.remove('sliding-out');
         });
         product.addEventListener('mouseleave', function (e) {
-            addButton.style.animation = 'slideOut 500ms forwards';
+            addButton.classList.remove('sliding-in');
+            addButton.classList.add('sliding-out');
         });
     });
     getProducts();
@@ -18,7 +20,7 @@ const getProducts = function () {
         const data = JSON.parse(this.response);
         const windows = document.querySelectorAll('.product-data');
         for (let i = 0; i < data.length; i++) {
-            windows[i].textContent = `${data[i].Id}: ${data[i].Name}, \$${data[i].Price / 100}`;
+            windows[i].textContent = `${data[i].Id}: ${data[i].Name}, \$${(data[i].Price / 100).toFixed(2)}`;
         }
     };
     getProd.onerror = function (err) {
