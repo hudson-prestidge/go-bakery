@@ -11,6 +11,7 @@ import(
 type Product struct {
   Id int
   Name string
+  Price int
 }
 
 func GetProducts() http.HandlerFunc {
@@ -23,8 +24,9 @@ func GetProducts() http.HandlerFunc {
     var (
       id int
       name string
+      price int
     )
-    rows, err := db.Query("SELECT id, name FROM products")
+    rows, err := db.Query("SELECT id, name, price FROM products")
     if err != nil {
       log.Fatal(err)
     }
@@ -33,11 +35,11 @@ func GetProducts() http.HandlerFunc {
     var data []Product
     defer rows.Close()
     for rows.Next() {
-      err := rows.Scan(&id, &name)
+      err := rows.Scan(&id, &name, &price)
       if err != nil {
         log.Fatal(err)
       }
-      p := Product{Id: id, Name: name}
+      p := Product{Id: id, Name: name, Price: price}
       data = append(data, p)
     }
     js, err := json.Marshal(data)

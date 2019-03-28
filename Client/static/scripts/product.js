@@ -18,7 +18,7 @@ const getProducts = function () {
         const data = JSON.parse(this.response);
         const windows = document.querySelectorAll('.product-data');
         for (let i = 0; i < data.length; i++) {
-            windows[i].textContent = `${data[i].Id}: ${data[i].Name}`;
+            windows[i].textContent = `${data[i].Id}: ${data[i].Name}, \$${data[i].Price / 100}`;
         }
     };
     getProd.onerror = function (err) {
