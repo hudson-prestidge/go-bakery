@@ -179,10 +179,15 @@ aside {
   display: inline;
 }
 
-#auth-buttons {
+#auth-links {
   position: absolute;
   right: 1em;
   top: 1em;
+}
+
+.signup-form {
+  width: 60%;
+  height: 2em;
 }
 
 .sliding-in {
