@@ -50,3 +50,34 @@ func GetProducts() http.HandlerFunc {
     defer db.Close()
   }
 }
+
+func AddUser() http.HandlerFunc {
+  return func(w http.ResponseWriter, r *http.Request) {
+    if r.Method == "POST" {
+      connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
+      db, err := sql.Open("postgres", connStr)
+      if err != nil {
+        log.Fatal(err)
+      }
+      stmt, err := db.Prepare("INSERT INTO users(username, passwordhash, passwordsalt, isdisabled) VALUES ")
+      if err != nil {
+        log.Fatal(err)
+        }
+        res, err := stmt.Exec("testuser", "sdfjksdklgh", "srjkbrjkbsrj", false)
+        if err != nil {
+          log.Fatal(err)
+        }
+        lastId, err := res.LastInsertId()
+        if err != nil {
+          log.Fatal(err)
+        }
+        rowCnt, err := res.RowsAffected()
+        if err != nil {
+          log.Fatal(err)
+        }
+        log.Printf("ID = %d, affected = %d\n", lastId, rowCnt)
+      } else {
+        log.Printf("/api/v1/users GET route")
+      }
+   }
+}
