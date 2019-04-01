@@ -6,6 +6,8 @@ import(
   _ "github.com/lib/pq"
   "net/http"
   "encoding/json"
+  "strings"
+  "fmt"
 )
 
 type Product struct {
@@ -54,32 +56,30 @@ func GetProducts() http.HandlerFunc {
 func AddUser() http.HandlerFunc {
   return func(w http.ResponseWriter, r *http.Request) {
     if r.Method == "POST" {
-        log.Printf("/api/v1/users POST route")
-      // connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
-      // db, err := sql.Open("postgres", connStr)
-      // if err != nil {
-      //   log.Fatal(err)
-      // }
-      // stmt, err := db.Prepare("INSERT INTO users(username, passwordhash, passwordsalt, isdisabled) VALUES ")
-      // if err != nil {
-      //   log.Fatal(err)
-      //   }
-      //   res, err := stmt.Exec("testuser", "sdfjksdklgh", "srjkbrjkbsrj", false)
-      //   if err != nil {
-      //     log.Fatal(err)
-      //   }
-      //   lastId, err := res.LastInsertId()
-      //   if err != nil {
-      //     log.Fatal(err)
-      //   }
-      //   rowCnt, err := res.RowsAffected()
-      //   if err != nil {
-      //     log.Fatal(err)
-      //   }
-      //   log.Printf("ID = %d, affected = %d\n", lastId, rowCnt)
+      r.ParseForm()
+      username := strings.Join(r.Form["username"], "")
+      password := strings.Join(r.Form["password"], "")
+      connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
+      db, err := sql.Open("postgres", connStr)
+      if err != nil {
+        log.Printf("?", err)
+      }
+      tx, err := db.Begin()
+      if err != nil {
+        log.Printf("?", err)
+      }
+      test := fmt.Sprintf("INSERT INTO users(username, passwordhash, passwordsalt, isdisabled) VALUES('%s', '%s', 'srjkbrjkbsrj', 'false')", username, password)
+      stmt, err := tx.Prepare(test)
+      if err != nil {
+        log.Printf("?", err)
+      }
+      _, err = stmt.Exec()
+      if err != nil {
+        log.Printf("?", err)
+      }
+      tx.Commit()
+      defer db.Close()
       http.Redirect(w, r, "/index.html", 303)
-      } else {
-        log.Printf("/api/v1/users GET route")
       }
    }
 }
