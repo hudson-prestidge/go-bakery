@@ -24,9 +24,18 @@ Products table{
 To add:
 
 Users table{
-  id SERIAL PRIMARY KEY
-  username VARCHAR(50) UNIQUE NOT NULL
-  password TEXT NOT NULL
+  id SERIAL PRIMARY KEY,
+  username TEXT UNIQUE NOT NULL,
+  passwordhash TEXT NOT NULL,
+  passwordsalt TEXT NOT NULL,
+  isdisabled BOOLEAN
+}
+
+ usersessions table{
+  sessionkey TEXT PRIMARY KEY,
+  userid INTEGER NOT NULL REFERENCES users(id),
+  logintime TIMESTAMP NOT NULL,
+  lastseentime TIMESTAMP NOT NULL
 }
 
 Transactions table{
