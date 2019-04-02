@@ -116,7 +116,6 @@ func AuthenticateUser() http.HandlerFunc {
         log.Printf("?", err)
       }
       for rows.Next() {
-        log.Printf("user found: ?", username)
         var (
           id int
           username string
