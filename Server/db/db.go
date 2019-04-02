@@ -8,9 +8,7 @@ import(
   "encoding/json"
   "strings"
   "fmt"
-  "crypto/rand"
   "golang.org/x/crypto/bcrypt"
-  "encoding/base64"
 )
 
 type Product struct {
@@ -19,10 +17,19 @@ type Product struct {
   Price int
 }
 
+type User struct {
+  Id int
+  Username string
+  Passwordhash string
+  Passwordsalt string
+  Isdisabled bool
+}
+
 func GetProducts() http.HandlerFunc {
   return func(w http.ResponseWriter, r *http.Request){
     connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
     db, err := sql.Open("postgres", connStr)
+    defer db.Close()
     if err != nil {
       log.Printf("?", err)
     }
@@ -52,26 +59,19 @@ func GetProducts() http.HandlerFunc {
       log.Printf("?", err)
     }
     w.Write(js)
-    defer db.Close()
   }
 }
 
 func AddUser() http.HandlerFunc {
   return func(w http.ResponseWriter, r *http.Request) {
     if r.Method == "POST" {
-      salt := make([]byte, 64)
-      _, err := rand.Read(salt)
       r.ParseForm()
       username := strings.Join(r.Form["username"], "")
       password := strings.Join(r.Form["password"], "")
-      passwordBytes := []byte(password)
-      saltedpw := append(passwordBytes, salt...)
-      hashedpw, err := bcrypt.GenerateFromPassword(saltedpw, 1)
+      hashedpw, err := bcrypt.GenerateFromPassword([]byte(password), 14)
       if err != nil {
         log.Printf("?", err)
       }
-      encodedHash := base64.StdEncoding.EncodeToString(hashedpw)
-      encodedSalt := base64.StdEncoding.EncodeToString(salt)
       connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
       db, err := sql.Open("postgres", connStr)
       defer db.Close()
@@ -83,7 +83,7 @@ func AddUser() http.HandlerFunc {
       if err != nil {
         log.Printf("?", err)
       }
-      formattedStatement := fmt.Sprintf("INSERT INTO users(username, passwordhash, passwordsalt, isdisabled) VALUES('%s', '%s', '%s', 'false')", username, encodedHash, encodedSalt)
+      formattedStatement := fmt.Sprintf("INSERT INTO users(username, passwordhash, isdisabled) VALUES('%s', '%s', 'false')", username, string(hashedpw))
       stmt, err := tx.Prepare(formattedStatement)
       if err != nil {
         log.Printf("?", err)
@@ -95,4 +95,46 @@ func AddUser() http.HandlerFunc {
       http.Redirect(w, r, "/index.html", 303)
       }
    }
+}
+
+func AuthenticateUser() http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+      log.Printf("attempted login")
+      r.ParseForm()
+      username := strings.Join(r.Form["username"], "")
+      password := strings.Join(r.Form["password"], "")
+      connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
+      db, err := sql.Open("postgres", connStr)
+      defer db.Close()
+      if err != nil {
+        log.Printf("?", err)
+      }
+      query := fmt.Sprintf("SELECT * FROM users WHERE username='%s'", username)
+      rows, err := db.Query(query)
+      defer rows.Close()
+      if err != nil {
+        log.Printf("?", err)
+      }
+      for rows.Next() {
+        log.Printf("user found: ?", username)
+        var (
+          id int
+          username string
+          passwordhash string
+          isdisabled bool
+        )
+        err := rows.Scan(&id, &username, &passwordhash, &isdisabled)
+        if err != nil {
+          log.Printf("?", err)
+        }
+        u := User{Id: id, Username: username, Passwordhash: passwordhash, Isdisabled: isdisabled}
+        err = bcrypt.CompareHashAndPassword([]byte(u.Passwordhash), []byte(password))
+        if err != nil {
+          log.Printf("password doesn't match")
+        } else {
+          log.Printf("login successful")
+        }
+      }
+      http.Redirect(w, r, "/index.html", 303)
+    }
 }

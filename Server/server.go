@@ -10,6 +10,7 @@ func main() {
   mux := http.NewServeMux()
   mux.HandleFunc("/api/v1/products", db.GetProducts())
   mux.HandleFunc("/api/v1/users", db.AddUser())
+  mux.HandleFunc("/api/v1/users/login", db.AuthenticateUser())
   fs := http.FileServer(http.Dir("../client/static"))
   mux.Handle("/", fs)
 
