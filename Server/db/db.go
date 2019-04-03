@@ -6,11 +6,11 @@ import(
   _ "github.com/lib/pq"
   "net/http"
   "encoding/json"
-  // "encoding/base64"
   "strings"
   "fmt"
   "golang.org/x/crypto/bcrypt"
   "crypto/rand"
+  "time"
 )
 
 type Product struct {
@@ -140,13 +140,11 @@ func AuthenticateUser() http.HandlerFunc {
       if err != nil {
         log.Printf("password doesn't match")
       } else {
-        randomString, err := generateRandomString(50)
+        sessionKey, err := generateRandomString(50)
         if err != nil {
           log.Printf("failed to generate a session key")
         }
-        log.Printf("session key: %s", randomString)
-        formattedStatement := fmt.Sprintf("INSERT INTO usersessions(sessionkey, userid, logintime, lastseentime) VALUES('%s', %d, NOW(), NOW())", randomString, currentUser.Id)
-        log.Printf(formattedStatement)
+        formattedStatement := fmt.Sprintf("INSERT INTO usersessions(sessionkey, userid, logintime, lastseentime) VALUES('%s', %d, NOW(), NOW())", sessionKey, currentUser.Id)
         stmt, err := tx.Prepare(formattedStatement)
         if err != nil {
           log.Printf("?", err)
@@ -155,20 +153,23 @@ func AuthenticateUser() http.HandlerFunc {
         if err != nil {
           log.Printf("?", err)
         }
+        cookieExpiration := time.Now().Add(time.Hour)
+        cookie := http.Cookie{Name:"sessionKey" , Value: sessionKey, Expires: cookieExpiration}
+        http.SetCookie(w, &cookie)
       }
       http.Redirect(w, r, "/index.html", 303)
     }
 }
 
 func generateRandomString(n int) (string, error) {
-  bytes := make([]byte, 50)
+  bytes := make([]byte, n)
   _, err := rand.Read(bytes)
   if err != nil {
     return "", err
   }
   const letters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
   for i, b := range bytes {
-    bytes[i] = letters[b%byte(len(letters))]
+    bytes[i] = letters[b % byte(len(letters))]
   }
   return string(bytes), nil
 }
