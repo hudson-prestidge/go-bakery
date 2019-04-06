@@ -31,10 +31,10 @@ func GetProducts() http.HandlerFunc {
   return func(w http.ResponseWriter, r *http.Request){
     connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
     db, err := sql.Open("postgres", connStr)
-    defer db.Close()
     if err != nil {
       log.Printf("?", err)
     }
+    defer db.Close()
     var (
       id int
       name string
@@ -66,6 +66,12 @@ func GetProducts() http.HandlerFunc {
 
 func AddUser() http.HandlerFunc {
   return func(w http.ResponseWriter, r *http.Request) {
+    connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
+    db, err := sql.Open("postgres", connStr)
+    if err != nil {
+      log.Printf("?", err)
+    }
+    defer db.Close()
     if r.Method == "POST" {
       r.ParseForm()
       username := strings.Join(r.Form["username"], "")
@@ -74,12 +80,7 @@ func AddUser() http.HandlerFunc {
       if err != nil {
         log.Printf("?", err)
       }
-      connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
-      db, err := sql.Open("postgres", connStr)
-      defer db.Close()
-      if err != nil {
-        log.Printf("?", err)
-      }
+
       tx, err := db.Begin()
       defer tx.Commit()
       if err != nil {
@@ -95,8 +96,43 @@ func AddUser() http.HandlerFunc {
         log.Printf("?", err)
       }
       http.Redirect(w, r, "/index.html", 303)
+    }
+
+    if r.Method == "GET" {
+      cookie, err := r.Cookie("sessionKey")
+      if err != nil {
+        log.Printf("?", err)
       }
-   }
+      sessionKey := cookie.Value
+      var (
+        id int
+        username string
+        isdisabled bool
+      )
+      formattedStatement := fmt.Sprintf("SELECT id, username, isdisabled FROM users INNER JOIN usersessions ON users.id = usersessions.userid WHERE sessionkey='%s'", sessionKey)
+      rows, err := db.Query(formattedStatement)
+      if err != nil {
+        log.Printf("?", err)
+      }
+      w.Header().Set("Content-Type", "application/json")
+      w.WriteHeader(http.StatusCreated)
+      var data []User
+      defer rows.Close()
+      for rows.Next() {
+        err := rows.Scan(&id, &username, &isdisabled)
+        if err != nil {
+          log.Printf("?", err)
+        }
+        p := User{Id: id, Username: username, Isdisabled: isdisabled}
+        data = append(data, p)
+      }
+      js, err := json.Marshal(data)
+      if err != nil {
+        log.Printf("?", err)
+      }
+      w.Write(js)
+    }
+  }
 }
 
 func AuthenticateUser() http.HandlerFunc {
@@ -159,6 +195,12 @@ func AuthenticateUser() http.HandlerFunc {
       }
       http.Redirect(w, r, "/index.html", 303)
     }
+}
+
+func GetUserData() http.HandlerFunc {
+  return func(w http.ResponseWriter , r *http.Request) {
+    log.Printf("test")
+  }
 }
 
 func generateRandomString(n int) (string, error) {

@@ -11,4 +11,5 @@ window.onload = function() :void {
       addButton.style.animation = 'slideOut 500ms forwards'
     })
   })
+
 }

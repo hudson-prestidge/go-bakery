@@ -9,5 +9,7 @@ window.onload = function () {
             addButton.style.animation = 'slideOut 500ms forwards';
         });
     });
+    let x = document.cookie;
+    console.log(x);
 };
 //# sourceMappingURL=index.js.map
