@@ -11,6 +11,7 @@ import(
   "golang.org/x/crypto/bcrypt"
   "crypto/rand"
   "time"
+  "strconv"
 )
 
 type Product struct {
@@ -25,6 +26,10 @@ type User struct {
   Passwordhash string
   Passwordsalt string
   Isdisabled bool
+}
+
+type TestStruct struct {
+  Id string
 }
 
 func GetProducts() http.HandlerFunc {
@@ -135,6 +140,43 @@ func AddUser() http.HandlerFunc {
   }
 }
 
+func AddItemToCart() http.HandlerFunc {
+  return func (w http.ResponseWriter, r *http.Request) {
+    decoder := json.NewDecoder(r.Body)
+    var p TestStruct
+    err := decoder.Decode(&p)
+    if err != nil {
+      log.Printf("?", err)
+    }
+    productId, err := strconv.Atoi(p.Id)
+    log.Printf("?", productId)
+    if err != nil {
+      log.Printf("?", err)
+    }
+    connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
+    db, err := sql.Open("postgres", connStr)
+    if err != nil {
+      log.Printf("?", err)
+    }
+    defer db.Close()
+    cookie, err := r.Cookie("sessionKey")
+    if err != nil {
+      log.Printf("?", err)
+    }
+    sessionKey := cookie.Value
+    formattedStatement := fmt.Sprintf("UPDATE users SET cart = cart || '{%d}' FROM usersessions WHERE users.id = usersessions.userid AND usersessions.sessionkey = '%s'", productId, sessionKey)
+    log.Printf(formattedStatement)
+    stmt, err := db.Prepare(formattedStatement)
+    if err != nil {
+      log.Printf("?", err)
+    }
+    _, err = stmt.Exec()
+    if err != nil {
+      log.Printf("?", err)
+    }
+  }
+}
+
 func AuthenticateUser() http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
       r.ParseForm()
@@ -151,7 +193,7 @@ func AuthenticateUser() http.HandlerFunc {
       if err != nil {
         log.Printf("?", err)
       }
-      query := fmt.Sprintf("SELECT * FROM users WHERE username='%s'", username)
+      query := fmt.Sprintf("SELECT id, username, passwordhash, isdisabled FROM users WHERE username='%s'", username)
       rows, err := tx.Query(query)
 
       if err != nil {

@@ -11,39 +11,6 @@ to show I can work with different technologies!
 
 once this project is complete I'm going to build the portfolio site that houses this and the previous project(https://github.com/hudson-prestidge/note-taking-express)
 
-Relevant Database Schema:
-
-
-Products table{
-  id SERIAL PRIMARY KEY NOT NULL
-  name VARCHAR(50) UNIQUE NOT NULL
-  image_name VARCHAR NOT NULL
-  price INTEGER NOT NULL
-}
-
-To add:
-
-Users table{
-  id SERIAL PRIMARY KEY,
-  username TEXT UNIQUE NOT NULL,
-  passwordhash TEXT NOT NULL,
-  isdisabled BOOLEAN
-}
-
- usersessions table{
-  sessionkey TEXT PRIMARY KEY,
-  userid INTEGER NOT NULL REFERENCES users(id),
-  logintime TIMESTAMP NOT NULL,
-  lastseentime TIMESTAMP NOT NULL
-}
-
-Transactions table{
-  id SERIAL PRIMARY KEY
-  user_id INTEGER REFERENCES users(id) NOT NULL
-  product_id INTEGER REFERENCES product(id) NOT NULL
-  time DATETIME NOT NULL
-}
-
 Colors in mind so far:
 
 #3E92CC

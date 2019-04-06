@@ -222,6 +222,10 @@ aside {
   animation: 'slideOut' 500ms forwards;
 }
 
+.hidden {
+  display: none;
+}
+
 @keyframes slideIn {
   from {
     transform: translateY(100%);

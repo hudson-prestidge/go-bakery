@@ -11,7 +11,6 @@ window.onload = function() :void {
       addButton.style.animation = 'slideOut 500ms forwards'
     })
   })
-
   const getUserData = new XMLHttpRequest()
   getUserData.open("GET", "/api/v1/users")
   getUserData.onload = function() {
@@ -24,4 +23,14 @@ window.onload = function() :void {
     console.log(err)
   }
   getUserData.send()
+}
+
+const addProductToCart = function (productId :Number) :void {
+  const updateCart = new XMLHttpRequest()
+  updateCart.open("PUT", "/api/v1/users/cart")
+  updateCart.setRequestHeader("Content-Type", "application/json")
+  updateCart.onload = function() {
+    console.log(`attempting to add to cart: {"id": "${productId}"}`)
+  }
+  updateCart.send(JSON.stringify({"id": `${productId}`}))
 }

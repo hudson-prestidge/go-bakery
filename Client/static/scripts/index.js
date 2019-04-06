@@ -9,6 +9,7 @@ window.onload = function () {
             addButton.style.animation = 'slideOut 500ms forwards';
         });
     });
+    addProductToCart(2);
     const getUserData = new XMLHttpRequest();
     getUserData.open("GET", "/api/v1/users");
     getUserData.onload = function () {
@@ -21,5 +22,14 @@ window.onload = function () {
         console.log(err);
     };
     getUserData.send();
+};
+const addProductToCart = function (productId) {
+    const updateCart = new XMLHttpRequest();
+    updateCart.open("PUT", "/api/v1/users/cart");
+    updateCart.setRequestHeader("Content-Type", "application/json");
+    updateCart.onload = function () {
+        console.log(`attempting to add to cart: {"id": "${productId}"}`);
+    };
+    updateCart.send(JSON.stringify({ "id": `${productId}` }));
 };
 //# sourceMappingURL=index.js.map
