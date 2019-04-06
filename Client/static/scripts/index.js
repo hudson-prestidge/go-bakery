@@ -9,7 +9,17 @@ window.onload = function () {
             addButton.style.animation = 'slideOut 500ms forwards';
         });
     });
-    let x = document.cookie;
-    console.log(x);
+    const getUserData = new XMLHttpRequest();
+    getUserData.open("GET", "/api/v1/users");
+    getUserData.onload = function () {
+        const userData = JSON.parse(this.response)[0];
+        const username = userData.Username;
+        const userGreeting = document.querySelector('#user-greeting');
+        userGreeting.textContent = `Welcome, ${username}!`;
+    };
+    getUserData.onerror = function (err) {
+        console.log(err);
+    };
+    getUserData.send();
 };
 //# sourceMappingURL=index.js.map

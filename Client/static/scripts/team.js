@@ -12,4 +12,4 @@ window.onload = function () {
     };
     getUserData.send();
 };
-//# sourceMappingURL=signup.js.map
+//# sourceMappingURL=team.js.map

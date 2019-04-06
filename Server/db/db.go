@@ -197,12 +197,6 @@ func AuthenticateUser() http.HandlerFunc {
     }
 }
 
-func GetUserData() http.HandlerFunc {
-  return func(w http.ResponseWriter , r *http.Request) {
-    log.Printf("test")
-  }
-}
-
 func generateRandomString(n int) (string, error) {
   bytes := make([]byte, n)
   _, err := rand.Read(bytes)
