@@ -3,7 +3,7 @@ package db
 import(
   "log"
   "database/sql"
-  _ "github.com/lib/pq"
+  "github.com/lib/pq"
   "net/http"
   "encoding/json"
   "strings"
@@ -13,6 +13,11 @@ import(
   "time"
   "strconv"
 )
+
+type Cart struct {
+  Products []Product
+  Items pq.Int64Array
+}
 
 type Product struct {
   Id int
@@ -24,8 +29,8 @@ type User struct {
   Id int
   Username string
   Passwordhash string
-  Passwordsalt string
   Isdisabled bool
+  Cart []int
 }
 
 type TestStruct struct {
@@ -142,17 +147,6 @@ func AddUser() http.HandlerFunc {
 
 func AddItemToCart() http.HandlerFunc {
   return func (w http.ResponseWriter, r *http.Request) {
-    decoder := json.NewDecoder(r.Body)
-    var p TestStruct
-    err := decoder.Decode(&p)
-    if err != nil {
-      log.Printf("?", err)
-    }
-    productId, err := strconv.Atoi(p.Id)
-    log.Printf("?", productId)
-    if err != nil {
-      log.Printf("?", err)
-    }
     connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
     db, err := sql.Open("postgres", connStr)
     if err != nil {
@@ -164,17 +158,66 @@ func AddItemToCart() http.HandlerFunc {
       log.Printf("?", err)
     }
     sessionKey := cookie.Value
-    formattedStatement := fmt.Sprintf("UPDATE users SET cart = cart || '{%d}' FROM usersessions WHERE users.id = usersessions.userid AND usersessions.sessionkey = '%s'", productId, sessionKey)
-    log.Printf(formattedStatement)
-    stmt, err := db.Prepare(formattedStatement)
-    if err != nil {
-      log.Printf("?", err)
+
+    if r.Method == "GET" {
+      formattedStatement := fmt.Sprintf(`SELECT products.id, products.name, products.price, cart FROM users
+                                      INNER JOIN usersessions ON users.id=usersessions.userid
+                                      LEFT JOIN products ON products.id=ANY(users.cart)
+                                      WHERE sessionKey='%s'`, sessionKey)
+      rows, err := db.Query(formattedStatement)
+      if err != nil {
+        log.Printf("?", err)
+      }
+      var (
+          id int
+          name string
+          price int
+          cart pq.Int64Array
+        )
+      w.Header().Set("Content-Type", "application/json")
+      w.WriteHeader(http.StatusCreated)
+      defer rows.Close()
+      var data Cart
+      for rows.Next() {
+        err := rows.Scan(&id, &name, &price, &cart)
+        if err != nil {
+          log.Printf("?", err)
+        }
+        p := Product{Id: id, Name: name, Price: price}
+        data.Products = append(data.Products, p)
+      }
+      data.Items = cart
+      js, err := json.Marshal(data)
+      if err != nil {
+        log.Printf("?", err)
+      }
+      w.Write(js)
     }
-    _, err = stmt.Exec()
-    if err != nil {
-      log.Printf("?", err)
+
+    if r.Method == "PUT" {
+      decoder := json.NewDecoder(r.Body)
+      var p TestStruct
+      err := decoder.Decode(&p)
+      if err != nil {
+        log.Printf("?", err)
+      }
+      productId, err := strconv.Atoi(p.Id)
+      log.Printf("?", productId)
+      if err != nil {
+        log.Printf("?", err)
+      }
+      formattedStatement := fmt.Sprintf("UPDATE users SET cart = cart || '{%d}' FROM usersessions WHERE users.id = usersessions.userid AND usersessions.sessionkey = '%s'", productId, sessionKey)
+      log.Printf(formattedStatement)
+      stmt, err := db.Prepare(formattedStatement)
+      if err != nil {
+        log.Printf("?", err)
+      }
+      _, err = stmt.Exec()
+      if err != nil {
+        log.Printf("?", err)
+      }
+      http.Redirect(w, r, "/index.html", 303)
     }
-    http.Redirect(w, r, "/index.html", 303)
   }
 }
 
