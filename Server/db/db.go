@@ -174,6 +174,7 @@ func AddItemToCart() http.HandlerFunc {
     if err != nil {
       log.Printf("?", err)
     }
+    http.Redirect(w, r, "/index.html", 303)
   }
 }
 
