@@ -6,6 +6,9 @@ window.onload = function () {
         const username = userData.Username;
         const userGreeting = document.querySelector('#user-greeting');
         userGreeting.textContent = `Welcome, ${username}!`;
+        const loginLogoutLink = document.querySelector("#login-logout-link");
+        loginLogoutLink.setAttribute("href", "/logout");
+        loginLogoutLink.textContent = "Logout";
     };
     getUserData.onerror = function (err) {
         console.log(err);

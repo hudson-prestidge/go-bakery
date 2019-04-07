@@ -21,6 +21,10 @@ const getUserData = function() :void{
     const username = userData.Username;
     const userGreeting = document.querySelector('#user-greeting')
     userGreeting.textContent = `Welcome, ${username}!`
+
+    const loginLogoutLink = document.querySelector("#login-logout-link")
+    loginLogoutLink.setAttribute("href", "/logout")
+    loginLogoutLink.textContent = "Logout"
   }
   getUsers.onerror = function(err) {
     console.log(err)
@@ -33,7 +37,7 @@ const getProductData = function(callback?: (products :Element[]) => void) :void{
   getProducts.open('GET', '/api/v1/products')
   getProducts.onload = function() {
     const data = JSON.parse(this.response)
-    const windows :Element[] = document.querySelectorAll('.product-data')
+    const windows = document.querySelectorAll('.product-data')
     for(let i = 0; i < windows.length; i++) {
       windows[i].textContent = `${data[i].Id}: ${data[i].Name}, \$${(data[i].Price/100).toFixed(2)}`
     }
