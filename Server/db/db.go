@@ -233,11 +233,19 @@ func AuthenticateUser() http.HandlerFunc {
           log.Printf("?", err)
         }
         cookieExpiration := time.Now().Add(time.Hour)
-        cookie := http.Cookie{Name:"sessionKey" , Value: sessionKey, Expires: cookieExpiration}
+        cookie := http.Cookie{Name:"sessionKey" , Value: sessionKey, Path:"/api/v1/users/", Expires: cookieExpiration, HttpOnly: true}
         http.SetCookie(w, &cookie)
       }
       http.Redirect(w, r, "/index.html", 303)
     }
+}
+
+func LogoutUser() http.HandlerFunc{
+  return func(w http.ResponseWriter, r *http.Request) {
+    cookie := http.Cookie{Name:"sessionKey", Value: "", MaxAge: 0, Path:"/api/v1/users/" , HttpOnly: true}
+    http.SetCookie(w, &cookie)
+    http.Redirect(w, r, "/index.html", 303)
+  }
 }
 
 func generateRandomString(n int) (string, error) {
