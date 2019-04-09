@@ -20,7 +20,7 @@ func main() {
   defer tx.Commit()
   stmt, err := tx.Prepare(`INSERT INTO products(id, name, image_name, price)
   VALUES (1, 'Bread', 'Bread', 200),
-  (2, 'Mini Pies', 'Mini Pies', 120),
+  (2, 'Mini Pies', 'Minipie', 120),
   (3, 'Custard Slice', 'Custardslice', 250),
   (4, 'Pinwheel Scone', 'Pinwheelscone', 150),
   (5, 'Blueberry Danish', 'Blueberrydanish', 320),

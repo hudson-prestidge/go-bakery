@@ -37,13 +37,18 @@ const setupCartList = function(products:Product[], itemQuantities:{[Id:number] :
   products.forEach(function(p:Product) {
     let productRow = document.createElement("tr")
     productRow.classList.add("product-row")
+
     let productName = document.createElement("td")
     productName.textContent = p.Name
+
     let productQuantity = document.createElement("td")
     productQuantity.textContent = `${itemQuantities[p.Id]}`
+
     let productPrice = document.createElement("td")
     productPrice.textContent = `$${(p.Price/100 * itemQuantities[p.Id]).toFixed(2)}`
+
     subtotalPrice += (p.Price/100 * itemQuantities[p.Id])
+
     productRow.appendChild(productName)
     productRow.appendChild(productQuantity)
     productRow.appendChild(productPrice)
@@ -51,11 +56,15 @@ const setupCartList = function(products:Product[], itemQuantities:{[Id:number] :
   })
   let totalRow = document.createElement("tr")
   totalRow.classList.add("total-row")
+
   let namePlaceholder = document.createElement("td")
   namePlaceholder.textContent = "total:"
+
   let quantityPlaceholder = document.createElement("td")
+
   let totalPrice = document.createElement("td")
   totalPrice.textContent = `$${subtotalPrice.toFixed(2)}`
+
   totalRow.appendChild(namePlaceholder)
   totalRow.appendChild(quantityPlaceholder)
   totalRow.appendChild(totalPrice)

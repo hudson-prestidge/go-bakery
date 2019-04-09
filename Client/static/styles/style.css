@@ -1,17 +1,74 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
 * {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
 
-body {
+p, a, h1, h2 {
+  font-family: "Cabin", sans-serif;
   font-size: 15px;
-  background-color: #3E92CC;
-  margin: 0;
+}
+
+body {
+  background-color: #b6dcfe;
 }
 
 header {
-  background-color: #2A628F;
+  background-color: #7b94aa;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,7 +80,7 @@ header {
 }
 
 footer {
-  background-color: #2A628F;
+  background-color: #7b94aa;
   height: 5vh;
   width: 100%;
   display: flex;
@@ -36,10 +93,31 @@ footer {
 aside {
   padding: 0.5em;
   width: 30%;
-  border: 0.1em solid #13293D;
+  border: 0.1em solid #313638;
   display: inline-block;
   border-radius: 10px;
+}
+
+.mission-statement-text {
   font-size: 1.5em;
+}
+
+.nav-links {
+  position: absolute;
+  left: 1em;
+  width: 30em;
+}
+
+.nav-link, .nav-link:visited {
+  color: #033f63;
+  padding: 0.7em;
+  border-radius: 10px;
+  border: 1px solid #313638;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  border-color: #eaf4d3;
 }
 
 .shameless-plug {
@@ -106,7 +184,7 @@ aside {
 }
 
 .product-window:hover {
-  border: 1px solid #13293D;
+  border: 1px solid #313638;
 }
 
 .product-img {
@@ -123,6 +201,7 @@ aside {
 }
 
 .product-data {
+  display: none;
   font-size: 15px;
 }
 
@@ -148,14 +227,9 @@ aside {
   margin-bottom: 7vh;
 }
 
-.nav-links {
-  position: absolute;
-  left: 1em;
-}
-
 .title-area {
   height: 90%;
-  border: 0.1em solid black;
+  border: 0.1em solid #313638;
   padding: 0 0.5em;
   border-radius: 5px;
 }
@@ -168,13 +242,13 @@ aside {
 #user-display {
   position: relative;
   left: 8em;
-  border: 0.1em solid grey;
+  border: 0.1em solid #313638;
   padding: 0.5em 3em;
   border-radius: 5px;
 }
 
 #user-display:hover {
-  border: 0.1em solid #13293D;
+  border: 0.1em solid #eaf4d3;
 }
 
 #user-greeting {
@@ -199,6 +273,18 @@ aside {
   position: absolute;
   right: 1em;
   top: 1em;
+}
+
+.auth-link, .auth-link:visited {
+  color: #033f63;
+  padding: 0.4em;
+  border: 1px solid #313638;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.auth-link:hover {
+  border-color: #eaf4d3;
 }
 
 .signup-form {
@@ -243,18 +329,64 @@ aside {
     margin-top: 7em;
     margin-bottom: 2em;
   }
+}
+@media (max-width: 1400px) {
+  .nav-links {
+    width: 16em;
+    height: 80%;
+    margin: 10% 2%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    line-height: 50%;
+  }
 
-  footer {
-    height: 2em;
+  .nav-link {
+    display: block;
+    height: 50%;
   }
 }
-@media (max-width: 800px) {
+@media (max-width: 1050px) {
+  header {
+    justify-content: flex-start;
+  }
+
+  .title-area {
+    display: none;
+  }
+
+  .nav-links {
+    position: static;
+  }
+
+  #auth-links {
+    height: 80%;
+    margin: 10% 0;
+    position: static;
+    width: 14em;
+  }
+
+  .auth-link {
+    position: relative;
+    padding: 0.4em 2em;
+    top: 50%;
+  }
+
+  .shopping-cart-link {
+    height: 100%;
+  }
+
+  #user-display {
+    display: none;
+  }
+
   .container {
     flex-direction: column;
   }
 
   aside {
-    width: 100%;
+    width: 80%;
+    margin-left: 10%;
   }
 
   .product-area-med {
@@ -265,8 +397,52 @@ aside {
     width: 100%;
   }
 
-  .nav-links a {
+  footer {
+    min-height: 5em;
+  }
+}
+@media (max-width: 600px) {
+  #auth-links {
+    width: auto;
+  }
+
+  .auth-link {
+    top: 20%;
     display: block;
+  }
+}
+@media (max-width: 500px) {
+  header {
+    align-items: flex-start;
+  }
+
+  .nav-links {
+    margin: 1em;
+    width: 60%;
+  }
+
+  #auth-links {
+    position: absolute;
+    margin: 0;
+    right: 1.5em;
+  }
+
+  .auth-link {
+    padding: 0.4em;
+    top: auto;
+    display: block;
+  }
+
+  .shopping-cart-link {
+    font-size: 1.6em;
+    top: auto;
+    right: 1.5em;
+    bottom: 0.3em;
+    height: 1em;
+  }
+
+  footer {
+    min-height: 7em;
   }
 }
 
