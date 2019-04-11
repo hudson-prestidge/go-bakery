@@ -115,6 +115,7 @@ aside {
 }
 
 .nav-link, .nav-link:visited {
+  background-color: $primary-color;
   color: $quinternary-color;
   padding: 0.7em;
   border-radius: 10px;
@@ -241,7 +242,7 @@ aside {
 }
 
 .main-title {
-  margin: 0.5em;
+	font-size: 24px;
   display: inline;
 }
 
@@ -453,7 +454,7 @@ aside {
   .shopping-cart-link {
 		font-size: 1.6em;
 		top: auto;
-    right: 1.5em;
+    right: 1.8em;
     bottom: 0.3em;
 		height: 1em;
   }
