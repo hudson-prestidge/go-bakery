@@ -305,6 +305,33 @@ aside {
   display: none;
 }
 
+#notification-popup {
+  position: fixed;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: red;
+  height: 3em;
+  width: 10em;
+}
+
+.popping-up {
+  -webkit-animation: slidePopup 2500ms;
+  -moz-animation: slidePopup 2500ms;
+  animation: slidePopup 2500ms;
+}
+
+@keyframes slidePopup {
+  0% {
+    transform: translate(-50%, 0);
+  }
+  70% {
+    transform: translate(-50%, -20vh);
+  }
+  0% {
+    transform: translate(-50%, 0);
+  }
+}
 @keyframes slideIn {
   from {
     transform: translateY(100%);

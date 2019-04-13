@@ -1,6 +1,9 @@
 window.onload = function () {
+    const popup = document.querySelector("#notification-popup");
+    const popupText = document.querySelector(".notification-text");
     if (getUrlParameter('attempt') === 'failed') {
-        console.log('invalid username or password');
+        popupText.textContent = "Invalid username or password";
+        popup.classList.add("popping-up");
     }
 };
 function getUrlParameter(name) {
