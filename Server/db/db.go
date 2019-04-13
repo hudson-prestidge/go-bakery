@@ -221,7 +221,7 @@ func AddItemToCart() http.HandlerFunc {
   }
 }
 
-func AuthenticateUser() http.HandlerFunc {
+func UserLogin() http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
       r.ParseForm()
       username := strings.Join(r.Form["username"], "")
@@ -239,7 +239,6 @@ func AuthenticateUser() http.HandlerFunc {
       }
       query := fmt.Sprintf("SELECT id, username, passwordhash, isdisabled FROM users WHERE username='%s'", username)
       rows, err := tx.Query(query)
-
       if err != nil {
         log.Printf("?", err)
       }
@@ -260,7 +259,7 @@ func AuthenticateUser() http.HandlerFunc {
       rows.Close()
       err = bcrypt.CompareHashAndPassword([]byte(currentUser.Passwordhash), []byte(password))
       if err != nil {
-        log.Printf("password doesn't match")
+        http.Redirect(w, r, "/login.html?attempt=failed", 303)
       } else {
         sessionKey, err := generateRandomString(50)
         if err != nil {
@@ -278,8 +277,8 @@ func AuthenticateUser() http.HandlerFunc {
         cookieExpiration := time.Now().Add(time.Hour)
         cookie := http.Cookie{Name:"sessionKey" , Value: sessionKey, Path:"/api/v1/users/", Expires: cookieExpiration, HttpOnly: true}
         http.SetCookie(w, &cookie)
+        http.Redirect(w, r, "/", 303)
       }
-      http.Redirect(w, r, "/index.html", 303)
     }
 }
 

@@ -344,25 +344,23 @@ aside {
 }
 
 @media (max-width: 1400px) {
-    .nav-links {
-			width: 16em;
-      height: 80%;
-      margin: 10% 2%;
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-      line-height: 50%;
-    }
+	.nav-links {
+		width: 16em;
+		height: 80%;
+		margin: 10% 2%;
+		display: flex;
+		flex-direction: column;
+		flex-wrap: wrap;
+		line-height: 50%;
+	}
 
-    .nav-link {
-      display: block;
-      height: 50%;
-    }
-
+	.nav-link {
+		display: block;
+		height: 50%;
+	}
 }
 
 @media (max-width: 1050px) {
-
   header {
     justify-content: flex-start;
   }
@@ -421,8 +419,9 @@ aside {
 
 @media (max-width: 600px) {
   #auth-links {
-      width: auto;
+    width: auto;
   }
+
   .auth-link {
     top: 20%;
     display: block;
@@ -430,14 +429,13 @@ aside {
 }
 
 @media (max-width: 500px) {
-
 	header {
 		align-items: flex-start;
 	}
 
 	.nav-links {
-			margin: 1em;
-			width: 60%;
+		margin: 1em;
+		width: 60%;
 	}
 
   #auth-links {
@@ -445,6 +443,7 @@ aside {
     margin: 0;
 		right: 1.5em;
   }
+
   .auth-link {
 		padding: 0.4em;
     top: auto;
@@ -455,7 +454,7 @@ aside {
 		font-size: 1.6em;
 		top: auto;
     right: 1.8em;
-    bottom: 0.3em;
+    bottom: 0.4em;
 		height: 1em;
   }
 
