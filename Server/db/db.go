@@ -199,24 +199,30 @@ func AddItemToCart() http.HandlerFunc {
       var p TestStruct
       err := decoder.Decode(&p)
       if err != nil {
-        log.Printf("?", err)
+        log.Printf("can't decode product id", err)
       }
       productId, err := strconv.Atoi(p.Id)
-      log.Printf("?", productId)
       if err != nil {
-        log.Printf("?", err)
+        log.Printf("can't convert product id", err)
       }
       formattedStatement := fmt.Sprintf("UPDATE users SET cart = cart || '{%d}' FROM usersessions WHERE users.id = usersessions.userid AND usersessions.sessionkey = '%s'", productId, sessionKey)
-      log.Printf(formattedStatement)
       stmt, err := db.Prepare(formattedStatement)
       if err != nil {
-        log.Printf("?", err)
+        log.Printf("can't prepare statement", err)
       }
-      _, err = stmt.Exec()
+      res, err := stmt.Exec()
       if err != nil {
-        log.Printf("?", err)
+        log.Printf("can't execute statement", err)
       }
-      http.Redirect(w, r, "/index.html", 303)
+      rowCnt, err := res.RowsAffected()
+      if err != nil {
+        log.Printf("can't get rows affected", err)
+      }
+      if rowCnt == 0 {
+        http.Error(w, "You need to log in to add items to your cart.", 403)
+      } else {
+        w.Write([]byte("Item added to cart!"))
+      }
     }
   }
 }

@@ -4,10 +4,16 @@ window.onload = function () {
 };
 const addProductToCart = function (productId) {
     const updateCart = new XMLHttpRequest();
+    const popup = document.querySelector("#notification-popup");
+    const popupText = document.querySelector(".notification-text");
+    popup.addEventListener("animationend", function () {
+        popup.classList.remove("popping-up");
+    });
     updateCart.open("PUT", "/api/v1/users/cart");
     updateCart.setRequestHeader("Content-Type", "application/json");
     updateCart.onload = function () {
-        console.log(`attempting to add to cart: {"id": "${productId}"}`);
+        popupText.textContent = this.response;
+        popup.classList.add("popping-up");
     };
     updateCart.send(JSON.stringify({ "id": `${productId}` }));
 };

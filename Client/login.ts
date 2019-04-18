@@ -1,6 +1,9 @@
 window.onload = function() {
   const popup = document.querySelector("#notification-popup")
   const popupText = document.querySelector(".notification-text")
+  popup.addEventListener("animationend", function() {
+    popup.classList.remove("popping-up")
+  })
 
   if(getUrlParameter('attempt') === 'failed') {
     popupText.textContent = "Invalid username or password"
