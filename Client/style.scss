@@ -263,9 +263,8 @@ aside {
 }
 
 .shopping-cart-link {
-  position: absolute;
-  right: 1em;
-  top: 1em;
+	padding-bottom: 0.3em;
+	height: 50%;
   font-size: 3em;
 }
 
@@ -276,18 +275,34 @@ aside {
   display: inline;
 }
 
+.mini-container {
+	position: absolute;
+	right: 0;
+	height: $header-height;
+	width: 12em;
+	min-width: 120px;
+	min-height: 7em;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
 #auth-links {
-  position: absolute;
-  right: 1em;
-  top: 1em;
+	height: 50%;
+	padding-bottom: 1em;
+	width: 12em;
 }
 
 .auth-link, .auth-link:visited {
+  background-color: $primary-color;
   color: $quinternary-color;
   padding: 0.4em;
   border: 1px solid $tertiary-color;
   border-radius: 10px;
   text-decoration: none;
+	position: relative;
+	padding: 0.4em 1.6em;
+	top: 50%;
 }
 
 .auth-link:hover {
@@ -355,17 +370,18 @@ aside {
 
 
 @media (max-height: 750px) {
+
   header {
     height: 7em;
   }
 
   .container {
-    margin-top: 7em;
-    margin-bottom: 2em;
+    margin-top: 8em;
   }
 }
 
 @media (max-width: 1400px) {
+
 	.nav-links {
 		width: 16em;
 		height: 80%;
@@ -383,34 +399,8 @@ aside {
 }
 
 @media (max-width: 1050px) {
-  header {
-    justify-content: flex-start;
-  }
 
-  .title-area {
-    display: none;
-  }
 
-  .nav-links {
-    position: static;
-  }
-
-  #auth-links {
-    height: 80%;
-    margin: 10% 0;
-    position: static;
-    width: 14em;
-  }
-
-  .auth-link {
-    position: relative;
-    padding: 0.4em 2em;
-    top: 50%;
-  }
-
-  .shopping-cart-link {
-    height: 100%;
-  }
 
   #user-display {
     display: none;
@@ -418,6 +408,7 @@ aside {
 
   .container {
     flex-direction: column;
+		margin-bottom: 7em;
   }
 
   aside {
@@ -433,13 +424,24 @@ aside {
     width: 100%;
   }
 
-		footer {
-		  min-height: 5em;
-		}
+	footer {
+	  min-height: 5em;
+	}
+}
+
+@media (max-width: 800px) {
+	header {
+		justify-content: flex-start;
+	}
+
+	.nav-links {
+		position: static;
+	}
 }
 
 
-@media (max-width: 600px) {
+@media (max-width: 667px) {
+
   #auth-links {
     width: auto;
   }
@@ -448,37 +450,31 @@ aside {
     top: 20%;
     display: block;
   }
+
+	.shopping-cart-link {
+		font-size: 1.6em;
+		padding: 0.7em 0;
+	}
 }
 
-@media (max-width: 500px) {
-	header {
-		align-items: flex-start;
+@media (max-width: 625px) {
+	.container {
+		margin-bottom: 9em;
+	}
+	.title-area {
+		display: none;
 	}
 
 	.nav-links {
-		margin: 1em;
+		margin: 0.5em;
 		width: 60%;
 	}
 
-  #auth-links {
-		position: absolute;
-    margin: 0;
-		right: 1.5em;
-  }
+  .mini-container {
+		min-width: 105px;
+		width: 105px;
+	}
 
-  .auth-link {
-		padding: 0.4em;
-    top: auto;
-    display: block;
-  }
-
-  .shopping-cart-link {
-		font-size: 1.6em;
-		top: auto;
-    right: 1.8em;
-    bottom: 0.4em;
-		height: 1em;
-  }
 
 	footer {
 		min-height: 7em;
