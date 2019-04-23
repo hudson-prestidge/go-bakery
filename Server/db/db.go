@@ -112,36 +112,39 @@ func AddUser() http.HandlerFunc {
     if r.Method == "GET" {
       cookie, err := r.Cookie("sessionKey")
       if err != nil {
-        log.Printf("?", err)
-      }
-      sessionKey := cookie.Value
-      var (
-        id int
-        username string
-        isdisabled bool
-      )
-      formattedStatement := fmt.Sprintf("SELECT id, username, isdisabled FROM users INNER JOIN usersessions ON users.id = usersessions.userid WHERE sessionkey='%s'", sessionKey)
-      rows, err := db.Query(formattedStatement)
-      if err != nil {
-        log.Printf("?", err)
-      }
-      w.Header().Set("Content-Type", "application/json")
-      w.WriteHeader(http.StatusCreated)
-      var data []User
-      defer rows.Close()
-      for rows.Next() {
-        err := rows.Scan(&id, &username, &isdisabled)
+
+        http.Error(w, "not logged in", 403)
+        return
+      } else {
+        sessionKey := cookie.Value
+        var (
+          id int
+          username string
+          isdisabled bool
+        )
+        formattedStatement := fmt.Sprintf("SELECT id, username, isdisabled FROM users INNER JOIN usersessions ON users.id = usersessions.userid WHERE sessionkey='%s'", sessionKey)
+        rows, err := db.Query(formattedStatement)
         if err != nil {
           log.Printf("?", err)
         }
-        p := User{Id: id, Username: username, Isdisabled: isdisabled}
-        data = append(data, p)
+        w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(http.StatusCreated)
+        var data []User
+        defer rows.Close()
+        for rows.Next() {
+          err := rows.Scan(&id, &username, &isdisabled)
+          if err != nil {
+            log.Printf("?", err)
+          }
+          p := User{Id: id, Username: username, Isdisabled: isdisabled}
+          data = append(data, p)
+        }
+        js, err := json.Marshal(data)
+        if err != nil {
+          log.Printf("?", err)
+        }
+        w.Write(js)
       }
-      js, err := json.Marshal(data)
-      if err != nil {
-        log.Printf("?", err)
-      }
-      w.Write(js)
     }
   }
 }
@@ -175,18 +178,20 @@ func AddItemToCart() http.HandlerFunc {
           price int
           cart pq.Int64Array
         )
-      w.Header().Set("Content-Type", "application/json")
-      w.WriteHeader(http.StatusCreated)
+
       defer rows.Close()
       var data Cart
       for rows.Next() {
         err := rows.Scan(&id, &name, &price, &cart)
         if err != nil {
-          log.Printf("?", err)
+          http.Error(w, "no items in cart", 406)
+          return
         }
         p := Product{Id: id, Name: name, Price: price}
         data.Products = append(data.Products, p)
       }
+      w.Header().Set("Content-Type", "application/json")
+      w.WriteHeader(http.StatusCreated)
       data.Items = cart
       js, err := json.Marshal(data)
       if err != nil {
@@ -354,7 +359,8 @@ func HandleTransactions() http.HandlerFunc {
                                       SELECT id, cart
                                       FROM users INNER JOIN usersessions
                                       ON users.id=usersessions.userid
-                                      WHERE sessionkey='%s'`, sessionKey)
+                                      WHERE sessionkey='%s'
+                                      AND array_length(cart, 1) > 0`, sessionKey)
       stmt, err := tx.Prepare(formattedStatement)
       if err != nil {
         log.Printf("?", err)
@@ -365,7 +371,7 @@ func HandleTransactions() http.HandlerFunc {
       }
       formattedStatement = fmt.Sprintf(`UPDATE users SET cart = '{}' FROM usersessions
                                     WHERE users.id = usersessions.userid
-                                    AND usersessions.sessionkey = '%s'`, sessionKey)
+                                    AND usersessions.sessionkey = '%s' `, sessionKey)
       stmt, err = tx.Prepare(formattedStatement)
       if err != nil {
         log.Printf("?", err)
@@ -374,9 +380,7 @@ func HandleTransactions() http.HandlerFunc {
       if err != nil {
         log.Printf("?", err)
       }
-      http.Redirect(w, r, "/index.html", 303)
     }
-
   }
 }
 

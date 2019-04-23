@@ -37,6 +37,9 @@ const retrieveCartProducts = function (callback?: (products:Product[], itemQuant
 const checkout = function () :void {
   const checkoutCart = new XMLHttpRequest
   checkoutCart.open("POST", "/api/v1/transactions")
+  checkoutCart.onload = function() {
+    window.location.replace("/")
+  }
   checkoutCart.send()
 }
 

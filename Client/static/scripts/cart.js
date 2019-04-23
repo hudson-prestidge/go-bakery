@@ -28,6 +28,9 @@ const retrieveCartProducts = function (callback) {
 const checkout = function () {
     const checkoutCart = new XMLHttpRequest;
     checkoutCart.open("POST", "/api/v1/transactions");
+    checkoutCart.onload = function () {
+        window.location.replace("/");
+    };
     checkoutCart.send();
 };
 const getUserData = function () {
