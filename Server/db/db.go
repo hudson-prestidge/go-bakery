@@ -82,6 +82,7 @@ func AddUser() http.HandlerFunc {
       log.Printf("?", err)
     }
     defer db.Close()
+
     if r.Method == "POST" {
       r.ParseForm()
       username := strings.Join(r.Form["username"], "")
@@ -281,7 +282,7 @@ func UserLogin() http.HandlerFunc {
           log.Printf("?", err)
         }
         cookieExpiration := time.Now().Add(time.Hour)
-        cookie := http.Cookie{Name:"sessionKey" , Value: sessionKey, Path:"/api/v1/users/", Expires: cookieExpiration, HttpOnly: true}
+        cookie := http.Cookie{Name:"sessionKey" , Value: sessionKey, Path:"/", Expires: cookieExpiration, HttpOnly: true}
         http.SetCookie(w, &cookie)
         http.Redirect(w, r, "/", 303)
       }
@@ -290,9 +291,92 @@ func UserLogin() http.HandlerFunc {
 
 func LogoutUser() http.HandlerFunc{
   return func(w http.ResponseWriter, r *http.Request) {
-    cookie := http.Cookie{Name:"sessionKey", Value: "", MaxAge: 0, Path:"/api/v1/users/" , HttpOnly: true}
+    cookie := http.Cookie{Name:"sessionKey", Value: "", MaxAge: -1, Path:"/" , HttpOnly: true}
     http.SetCookie(w, &cookie)
     http.Redirect(w, r, "/index.html", 303)
+  }
+}
+
+func HandleTransactions() http.HandlerFunc {
+  return func(w http.ResponseWriter, r *http.Request) {
+    connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
+    db, err := sql.Open("postgres", connStr)
+    if err != nil {
+      log.Printf("?", err)
+    }
+    defer db.Close()
+    cookie, err := r.Cookie("sessionKey")
+    if err != nil {
+      log.Printf("?", err)
+    }
+    sessionKey := cookie.Value
+
+    if r.Method == "GET" {
+      formattedStatement := fmt.Sprintf(`SELECT products.id, products.name, products.price, product_list FROM users
+                                      INNER JOIN usersessions ON users.id=usersessions.userid
+                                      INNER JOIN transactions ON users.id=transactions.user_id
+                                      LEFT JOIN products ON products.id=ANY(transactions.product_list)
+                                      WHERE sessionKey='%s'`, sessionKey)
+      rows, err := db.Query(formattedStatement)
+      if err != nil {
+        log.Printf("?", err)
+      }
+      var (
+          id int
+          name string
+          price int
+          product_list pq.Int64Array
+        )
+      w.Header().Set("Content-Type", "application/json")
+      w.WriteHeader(http.StatusCreated)
+      defer rows.Close()
+      var data Cart
+      for rows.Next() {
+        err := rows.Scan(&id, &name, &price, &product_list)
+        if err != nil {
+          log.Printf("?", err)
+        }
+        p := Product{Id: id, Name: name, Price: price}
+        data.Products = append(data.Products, p)
+      }
+      data.Items = product_list
+      js, err := json.Marshal(data)
+      if err != nil {
+        log.Printf("?", err)
+      }
+      w.Write(js)
+    }
+
+    if r.Method == "POST" {
+      tx, err := db.Begin()
+      defer tx.Commit()
+      formattedStatement := fmt.Sprintf(`INSERT INTO transactions(user_id, product_list)
+                                      SELECT id, cart
+                                      FROM users INNER JOIN usersessions
+                                      ON users.id=usersessions.userid
+                                      WHERE sessionkey='%s'`, sessionKey)
+      stmt, err := tx.Prepare(formattedStatement)
+      if err != nil {
+        log.Printf("?", err)
+      }
+      _, err = stmt.Exec()
+      if err != nil {
+        log.Printf("?", err)
+      }
+      formattedStatement = fmt.Sprintf(`UPDATE users SET cart = '{}' FROM usersessions
+                                    WHERE users.id = usersessions.userid
+                                    AND usersessions.sessionkey = '%s'`, sessionKey)
+      stmt, err = tx.Prepare(formattedStatement)
+      if err != nil {
+        log.Printf("?", err)
+      }
+      _, err = stmt.Exec()
+      if err != nil {
+        log.Printf("?", err)
+      }
+      http.Redirect(w, r, "/index.html", 303)
+    }
+
   }
 }
 

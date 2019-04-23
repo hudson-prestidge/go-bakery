@@ -1,5 +1,8 @@
 window.onload = function() {
   retrieveCartProducts(setupCartList)
+  getUserData()
+  const checkoutButton = <HTMLElement> document.querySelector('#checkoutbtn')
+  checkoutButton.addEventListener('click', checkout)
 }
 
 interface Product {
@@ -29,6 +32,35 @@ const retrieveCartProducts = function (callback?: (products:Product[], itemQuant
     console.log(err)
   }
   getCart.send()
+}
+
+const checkout = function () :void {
+  const checkoutCart = new XMLHttpRequest
+  checkoutCart.open("POST", "/api/v1/transactions")
+  checkoutCart.send()
+}
+
+const getUserData = function() :void{
+  const getUsers = new XMLHttpRequest()
+  getUsers.open("GET", "/api/v1/users")
+  getUsers.onload = function() {
+    if(this.response != 'null'){
+      const userData = JSON.parse(this.response)[0]
+      const username = userData.Username;
+      const userDisplay = document.querySelector('#user-display')
+      userDisplay.classList.remove('hidden')
+      const userGreeting = document.querySelector('#user-greeting')
+      userGreeting.textContent = `Welcome, ${username}!`
+
+      const loginLogoutLink = document.querySelector("#login-logout-link")
+      loginLogoutLink.setAttribute("href", "/logout")
+      loginLogoutLink.textContent = "Logout"
+    }
+  }
+  getUsers.onerror = function(err) {
+    console.log(err)
+  }
+  getUsers.send()
 }
 
 const setupCartList = function(products:Product[], itemQuantities:{[Id:number] : number}) {

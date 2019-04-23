@@ -1,6 +1,22 @@
 window.onload = function () {
+    const getUserData = new XMLHttpRequest();
+    getUserData.open("GET", "/api/v1/users");
+    getUserData.onload = function () {
+        if (this.response != 'null') {
+            const userData = JSON.parse(this.response)[0];
+            const username = userData.Username;
+            const userGreeting = document.querySelector('#user-greeting');
+            userGreeting.textContent = `Welcome, ${username}!`;
+            const loginLogoutLink = document.querySelector("#login-logout-link");
+            loginLogoutLink.setAttribute("href", "/logout");
+            loginLogoutLink.textContent = "Logout";
+        }
+    };
+    getUserData.onerror = function (err) {
+        console.log(err);
+    };
+    getUserData.send();
     getProductData(setupProductWindows);
-    getUserData();
 };
 const addProductToCart = function (productId) {
     const updateCart = new XMLHttpRequest();
@@ -16,27 +32,6 @@ const addProductToCart = function (productId) {
         popup.classList.add("popping-up");
     };
     updateCart.send(JSON.stringify({ "id": `${productId}` }));
-};
-const getUserData = function () {
-    const getUsers = new XMLHttpRequest();
-    getUsers.open("GET", "/api/v1/users");
-    getUsers.onload = function () {
-        if (this.response != 'null') {
-            const userData = JSON.parse(this.response)[0];
-            const username = userData.Username;
-            const userDisplay = document.querySelector('#user-display');
-            userDisplay.classList.remove('hidden');
-            const userGreeting = document.querySelector('#user-greeting');
-            userGreeting.textContent = `Welcome, ${username}!`;
-            const loginLogoutLink = document.querySelector("#login-logout-link");
-            loginLogoutLink.setAttribute("href", "/logout");
-            loginLogoutLink.textContent = "Logout";
-        }
-    };
-    getUsers.onerror = function (err) {
-        console.log(err);
-    };
-    getUsers.send();
 };
 const getProductData = function (callback) {
     const getProducts = new XMLHttpRequest();
