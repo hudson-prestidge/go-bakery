@@ -23,6 +23,7 @@ type Product struct {
   Id int
   Name string
   Price int
+  Image_name string
 }
 
 type User struct {
@@ -49,8 +50,9 @@ func GetProducts() http.HandlerFunc {
       id int
       name string
       price int
+      image_name string
     )
-    rows, err := db.Query("SELECT id, name, price FROM products")
+    rows, err := db.Query("SELECT id, name, price, image_name FROM products")
     if err != nil {
       log.Printf("?", err)
     }
@@ -59,11 +61,11 @@ func GetProducts() http.HandlerFunc {
     var data []Product
     defer rows.Close()
     for rows.Next() {
-      err := rows.Scan(&id, &name, &price)
+      err := rows.Scan(&id, &name, &price, &image_name)
       if err != nil {
         log.Printf("?", err)
       }
-      p := Product{Id: id, Name: name, Price: price}
+      p := Product{Id: id, Name: name, Price: price, Image_name: image_name}
       data = append(data, p)
     }
     js, err := json.Marshal(data)

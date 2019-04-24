@@ -45,11 +45,17 @@ const getProductData = function(callback?: (products :Element[]) => void) :void{
   getProducts.open('GET', '/api/v1/products')
   getProducts.onload = function() {
     const data = JSON.parse(this.response)
-    const windows = document.querySelectorAll('.product-data')
+    const randomizedData = shuffleArray(data)
+    console.log(data)
+    console.log(randomizedData)
+    const windows = document.querySelectorAll('.product-window')
     for(let i = 0; i < windows.length; i++) {
-      windows[i].textContent = `${data[i].Name}, \$${(data[i].Price/100).toFixed(2)}`
+      const productData = windows[i].querySelector('.product-data')
+      const productImage = <HTMLImageElement> windows[i].querySelector('.product-img')
+      productImage.src = `../img/${randomizedData[i].Image_name}.jpg`
+      productData.textContent = `${randomizedData[i].Name}, \$${(randomizedData[i].Price/100).toFixed(2)}`
     }
-    const products :Element[] = Array.from(document.getElementsByClassName('product-window'))
+    const products :Element[] = Array.from(windows)
     callback(products)
   }
   getProducts.onerror = function(err) {
@@ -80,4 +86,17 @@ const setupProductWindows = function (products :Element[]) :void{
     })
 
   })
+}
+
+const shuffleArray = function (arr :any[]) {
+  let arrCopy = arr.slice()
+  let newArr :any[] = []
+  let index :number
+  while(arrCopy.length > 0) {
+    index = Math.floor(Math.random()*arrCopy.length)
+    console.log(index)
+    newArr.push(arrCopy[index])
+    arrCopy.splice(index, 1)
+  }
+  return newArr
 }
