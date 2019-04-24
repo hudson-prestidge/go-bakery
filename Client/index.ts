@@ -47,7 +47,7 @@ const getProductData = function(callback?: (products :Element[]) => void) :void{
     const data = JSON.parse(this.response)
     const windows = document.querySelectorAll('.product-data')
     for(let i = 0; i < windows.length; i++) {
-      windows[i].textContent = `${data[i].Id}: ${data[i].Name}, \$${(data[i].Price/100).toFixed(2)}`
+      windows[i].textContent = `${data[i].Name}, \$${(data[i].Price/100).toFixed(2)}`
     }
     const products :Element[] = Array.from(document.getElementsByClassName('product-window'))
     callback(products)
@@ -61,13 +61,16 @@ const getProductData = function(callback?: (products :Element[]) => void) :void{
 const setupProductWindows = function (products :Element[]) :void{
   products.forEach(function(product) :void {
     let addButton = <HTMLElement>product.querySelector('.add-product-button')
+    let productData = <HTMLElement>product.querySelector('.product-data')
 
     product.addEventListener('mouseenter', function(e) :void {
-      addButton.style.animation = 'slideIn 500ms forwards'
+      addButton.style.animation = 'slideUp 500ms forwards'
+      productData.style.animation = 'slideDown 500ms forwards'
     })
 
     product.addEventListener('mouseleave', function(e) :void {
-      addButton.style.animation = 'slideOut 500ms forwards'
+      addButton.style.animation = 'slideDown 500ms forwards'
+      productData.style.animation = 'slideUp 500ms forwards'
     })
 
     product.addEventListener('click', function(e) :void {

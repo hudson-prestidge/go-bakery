@@ -208,8 +208,10 @@ aside {
 }
 
 .product-data {
-  display: none;
-  font-size: $fs;
+	animation-fill-mode: forwards;
+	transform: translateY(-100%);
+	top: 0;
+	position: absolute;
 }
 
 .disclaimer {
@@ -314,12 +316,12 @@ aside {
   height: 2em;
 }
 
-.sliding-in {
-  animation: 'slideIn' 500ms forwards;
+.sliding-up {
+  animation: 'slideUp' 500ms forwards;
 }
 
-.sliding-out {
-  animation: 'slideOut' 500ms forwards;
+.sliding-down {
+  animation: 'slideDown' 500ms forwards;
 }
 
 .hidden {
@@ -348,19 +350,19 @@ aside {
   0% {transform: translate(-50%, 0)}
 }
 
-@keyframes slideIn {
+@keyframes slideUp {
   from {
     transform: translateY(100%);
   }
 
   to {
-    transform: translateY(0);
+    transform: translateY(-100%);
   }
 }
 
-@keyframes slideOut {
+@keyframes slideDown {
   from {
-    transform: translateY(0);
+    transform: translateY(-100%);
   }
 
   to {
