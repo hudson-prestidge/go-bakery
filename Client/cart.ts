@@ -47,13 +47,13 @@ const getUserData = function() :void{
   const getUsers = new XMLHttpRequest()
   getUsers.open("GET", "/api/v1/users")
   getUsers.onload = function() {
-    if(this.response != 'null'){
-      const userData = JSON.parse(this.response)[0]
-      const username = userData.Username;
-      const userDisplay = document.querySelector('#user-display')
-      userDisplay.classList.remove('hidden')
+    const userData = JSON.parse(this.response)
+    if(Array.isArray(userData)){
+      const username = userData[0].Username;
       const userGreeting = document.querySelector('#user-greeting')
       userGreeting.textContent = `Welcome, ${username}!`
+      const userDisplay = document.querySelector('#user-display')
+      userDisplay.classList.remove('hidden')
 
       const loginLogoutLink = document.querySelector("#login-logout-link")
       loginLogoutLink.setAttribute("href", "/logout")
