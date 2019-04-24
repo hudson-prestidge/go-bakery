@@ -113,7 +113,7 @@ func AddUser() http.HandlerFunc {
       cookie, err := r.Cookie("sessionKey")
       if err != nil {
 
-        http.Error(w, "not logged in", 403)
+        http.Error(w, `{ "error": "not logged in"}`, 403)
         return
       } else {
         sessionKey := cookie.Value

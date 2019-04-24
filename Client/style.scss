@@ -290,7 +290,7 @@ aside {
 #auth-links {
 	height: 50%;
 	padding-bottom: 1em;
-	width: 12em;
+	width: 13em;
 }
 
 .auth-link, .auth-link:visited {
@@ -445,7 +445,7 @@ aside {
 }
 
 
-@media (max-width: 667px) {
+@media (max-width: 710px) {
 
   #auth-links {
     width: auto;
@@ -462,7 +462,7 @@ aside {
 	}
 }
 
-@media (max-width: 625px) {
+@media (max-width: 640px) {
 	.container {
 		margin-bottom: 9em;
 	}
