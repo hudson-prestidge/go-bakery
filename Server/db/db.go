@@ -159,7 +159,8 @@ func AddItemToCart() http.HandlerFunc {
     defer db.Close()
     cookie, err := r.Cookie("sessionKey")
     if err != nil {
-      log.Printf("?", err)
+      http.Error(w, `Log in to add an item to your cart!`, 403)
+      return
     }
     sessionKey := cookie.Value
 
