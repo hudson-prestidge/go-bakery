@@ -34,6 +34,11 @@ type User struct {
   Cart []int
 }
 
+type Transaction struct {
+  Id int
+  Product_list pq.Int64Array
+}
+
 type TestStruct struct {
   Id string
 }
@@ -318,36 +323,37 @@ func HandleTransactions() http.HandlerFunc {
       log.Printf("?", err)
     }
     sessionKey := cookie.Value
+    tx, err := db.Begin()
+    if err != nil {
+      log.Printf("?", err)
+    }
+    defer tx.Commit()
 
     if r.Method == "GET" {
-      formattedStatement := fmt.Sprintf(`SELECT products.id, products.name, products.price, product_list FROM users
+      formattedStatement := fmt.Sprintf(`SELECT transactions.id, product_list FROM transactions
+                                      INNER JOIN users ON users.id=transactions.user_id
                                       INNER JOIN usersessions ON users.id=usersessions.userid
-                                      INNER JOIN transactions ON users.id=transactions.user_id
-                                      LEFT JOIN products ON products.id=ANY(transactions.product_list)
                                       WHERE sessionKey='%s'`, sessionKey)
-      rows, err := db.Query(formattedStatement)
+      rows, err := tx.Query(formattedStatement)
       if err != nil {
         log.Printf("?", err)
       }
       var (
-          id int
-          name string
-          price int
+          transaction_id int
           product_list pq.Int64Array
         )
       w.Header().Set("Content-Type", "application/json")
       w.WriteHeader(http.StatusCreated)
       defer rows.Close()
-      var data Cart
+      var data []Transaction
       for rows.Next() {
-        err := rows.Scan(&id, &name, &price, &product_list)
+        err := rows.Scan(&transaction_id, &product_list)
         if err != nil {
           log.Printf("?", err)
         }
-        p := Product{Id: id, Name: name, Price: price}
-        data.Products = append(data.Products, p)
+        t := Transaction{Id: transaction_id, Product_list: product_list}
+        data = append(data, t)
       }
-      data.Items = product_list
       js, err := json.Marshal(data)
       if err != nil {
         log.Printf("?", err)
@@ -356,8 +362,6 @@ func HandleTransactions() http.HandlerFunc {
     }
 
     if r.Method == "POST" {
-      tx, err := db.Begin()
-      defer tx.Commit()
       formattedStatement := fmt.Sprintf(`INSERT INTO transactions(user_id, product_list)
                                       SELECT id, cart
                                       FROM users INNER JOIN usersessions

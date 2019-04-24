@@ -1,5 +1,6 @@
 window.onload = function() {
   retrieveCartProducts(setupCartList)
+  getUserData()
   const checkoutButton = <HTMLElement> document.querySelector('#checkoutbtn')
   checkoutButton.addEventListener('click', checkout)
 }
@@ -41,6 +42,7 @@ const checkout = function () :void {
   }
   checkoutCart.send()
 }
+
 
 const setupCartList = function(products:Product[], itemQuantities:{[Id:number] : number}) {
   const cartList = document.querySelector("#cart-list")

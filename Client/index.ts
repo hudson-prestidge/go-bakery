@@ -29,7 +29,9 @@ const getProductData = function(callback?: (products :Element[]) => void) :void{
     const windows = document.querySelectorAll('.product-window')
     for(let i = 0; i < windows.length; i++) {
       const productData = windows[i].querySelector('.product-data')
+      const productId = windows[i].querySelector('.product-id')
       const productImage = <HTMLImageElement> windows[i].querySelector('.product-img')
+      productId.textContent = `${randomizedData[i].Id}`
       productImage.src = `../img/${randomizedData[i].Image_name}.jpg`
       productData.textContent = `${randomizedData[i].Name}, \$${(randomizedData[i].Price/100).toFixed(2)}`
     }
@@ -58,8 +60,7 @@ const setupProductWindows = function (products :Element[]) :void{
     })
 
     product.addEventListener('click', function(e) :void {
-      const productInfo :Element = product.querySelector(".product-data")
-      const productId :Number = parseInt(productInfo.textContent.match(/(\d)+:/)[1])
+      const productId :number = Number(product.querySelector(".product-id").textContent)
       addProductToCart(productId)
     })
 

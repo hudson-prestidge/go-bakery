@@ -1,5 +1,6 @@
 window.onload = function () {
     retrieveCartProducts(setupCartList);
+    getUserData();
     const checkoutButton = document.querySelector('#checkoutbtn');
     checkoutButton.addEventListener('click', checkout);
 };

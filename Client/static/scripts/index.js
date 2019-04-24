@@ -25,7 +25,9 @@ const getProductData = function (callback) {
         const windows = document.querySelectorAll('.product-window');
         for (let i = 0; i < windows.length; i++) {
             const productData = windows[i].querySelector('.product-data');
+            const productId = windows[i].querySelector('.product-id');
             const productImage = windows[i].querySelector('.product-img');
+            productId.textContent = `${randomizedData[i].Id}`;
             productImage.src = `../img/${randomizedData[i].Image_name}.jpg`;
             productData.textContent = `${randomizedData[i].Name}, \$${(randomizedData[i].Price / 100).toFixed(2)}`;
         }
@@ -50,8 +52,7 @@ const setupProductWindows = function (products) {
             productData.style.animation = 'slideUp 500ms forwards';
         });
         product.addEventListener('click', function (e) {
-            const productInfo = product.querySelector(".product-data");
-            const productId = parseInt(productInfo.textContent.match(/(\d)+:/)[1]);
+            const productId = Number(product.querySelector(".product-id").textContent);
             addProductToCart(productId);
         });
     });
