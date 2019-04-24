@@ -1,6 +1,5 @@
 window.onload = function() {
   retrieveCartProducts(setupCartList)
-  getUserData()
   const checkoutButton = <HTMLElement> document.querySelector('#checkoutbtn')
   checkoutButton.addEventListener('click', checkout)
 }
@@ -41,29 +40,6 @@ const checkout = function () :void {
     window.location.replace("/")
   }
   checkoutCart.send()
-}
-
-const getUserData = function() :void{
-  const getUsers = new XMLHttpRequest()
-  getUsers.open("GET", "/api/v1/users")
-  getUsers.onload = function() {
-    const userData = JSON.parse(this.response)
-    if(Array.isArray(userData)){
-      const username = userData[0].Username;
-      const userGreeting = document.querySelector('#user-greeting')
-      userGreeting.textContent = `Welcome, ${username}!`
-      const userDisplay = document.querySelector('#user-display')
-      userDisplay.classList.remove('hidden')
-
-      const loginLogoutLink = document.querySelector("#login-logout-link")
-      loginLogoutLink.setAttribute("href", "/logout")
-      loginLogoutLink.textContent = "Logout"
-    }
-  }
-  getUsers.onerror = function(err) {
-    console.log(err)
-  }
-  getUsers.send()
 }
 
 const setupCartList = function(products:Product[], itemQuantities:{[Id:number] : number}) {

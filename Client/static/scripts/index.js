@@ -1,23 +1,4 @@
 window.onload = function () {
-    const getUserData = new XMLHttpRequest();
-    getUserData.open("GET", "/api/v1/users");
-    getUserData.onload = function () {
-        const userData = JSON.parse(this.response);
-        if (Array.isArray(userData)) {
-            const username = userData[0].Username;
-            const userGreeting = document.querySelector('#user-greeting');
-            userGreeting.textContent = `Welcome, ${username}!`;
-            const userDisplay = document.querySelector('#user-display');
-            userDisplay.classList.remove('hidden');
-            const loginLogoutLink = document.querySelector("#login-logout-link");
-            loginLogoutLink.setAttribute("href", "/logout");
-            loginLogoutLink.textContent = "Logout";
-        }
-    };
-    getUserData.onerror = function (err) {
-        console.log(err);
-    };
-    getUserData.send();
     getProductData(setupProductWindows);
 };
 const addProductToCart = function (productId) {
@@ -41,8 +22,6 @@ const getProductData = function (callback) {
     getProducts.onload = function () {
         const data = JSON.parse(this.response);
         const randomizedData = shuffleArray(data);
-        console.log(data);
-        console.log(randomizedData);
         const windows = document.querySelectorAll('.product-window');
         for (let i = 0; i < windows.length; i++) {
             const productData = windows[i].querySelector('.product-data');
@@ -83,7 +62,6 @@ const shuffleArray = function (arr) {
     let index;
     while (arrCopy.length > 0) {
         index = Math.floor(Math.random() * arrCopy.length);
-        console.log(index);
         newArr.push(arrCopy[index]);
         arrCopy.splice(index, 1);
     }

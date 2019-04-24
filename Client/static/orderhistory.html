@@ -2,17 +2,16 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Go Bakery | Products</title>
+    <title>Go Bakery</title>
     <link rel="stylesheet" href="/styles/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <script type="text/javascript" src="/scripts/user.js"> </script>
-    <script type="text/javascript" src="/scripts/index.js"> </script>
-  </head>
+    <script type="text/javascript" src="/scripts/orders.js"></script>
   <body>
     <header>
       <div class="nav-links">
         <a class="nav-link" href="/index.html">HOME</a>
-        <a class="nav-link" href="#">PRODUCTS</a>
+        <a class="nav-link" href="/product.html">PRODUCTS</a>
         <a class="nav-link" href="/team.html">MEET THE TEAM</a>
         <a class="nav-link" href="/contact.html">CONTACT US</a>
       </div>
@@ -22,7 +21,7 @@
       </div>
       <div id="user-display" class="hidden">
         <p id="user-greeting">Welcome, user!</p>
-        <a href="/orderhistory.html">View your order history</a>
+        <a href="#">View your order history</a>
       </div>
       <div class="mini-container">
         <div id="auth-links">
@@ -31,40 +30,21 @@
         </div>
         <a href='/cart.html' class='shopping-cart-link'><i class='fas fa-shopping-cart'></i></a>
       </div>
-    </header>
-    <div class="container">
-      <div class="product-area-lrg">
-          <div class="product-window">
-            <p class='product-data'></p>
-            <img src="../img/bread.jpg" class='product-img'>
-            <button class='add-product-button'>Add To Cart </button>
-          </div><div class="product-window">
-            <p class='product-data'></p>
-            <img src="../img/minipie.jpg" class='product-img'>
-            <button class='add-product-button'>Add To Cart </button>
-          </div><div class="product-window">
-            <p class='product-data'></p>
-            <img src="../img/custardslice.jpg" class='product-img'>
-            <button class='add-product-button'>Add To Cart </button>
-          </div><div class="product-window">
-            <p class='product-data'></p>
-            <img src="../img/pinwheelscone.jpg" class='product-img'>
-            <button class='add-product-button'>Add To Cart </button>
-          </div><div class="product-window">
-            <p class='product-data'></p>
-            <img src="../img/blueberrydanish.jpg" class='product-img'>
-            <button class='add-product-button'>Add To Cart </button>
-          </div><div class="product-window">
-            <p class='product-data'></p>
-            <img src="../img/apricotdanish.jpg" class='product-img'>
-            <button class='add-product-button'>Add To Cart </button>
-          </div>
+    </header><div class="container">
+      <div id="order-container">
+        <table id="order-list">
+          <tr>
+            <th>Order Number</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Order Time</th>
+          </tr>
+        </table>
       </div>
-    </div>
-    <footer>
+    </div><footer>
       <p class='footer-text disclaimer'>Go bakery is not liable for any harm caused to any person or persons upon ingesting any of the goods displayed on this website - let the buyer beware. Go bakery does not own any of the rights to any products shown, nor do we guarantee our ability to supply them or in fact anything to anyone at any time.</p>
       <p class='footer-text trademark'>Nothing here is actually trademarked or copyrighted at all, as it turns out.</p>
     </footer>
-    <div id="notification-popup"><p class="notification-text"></p></div>
   </body>
 </html>
