@@ -44,6 +44,10 @@ type TestStruct struct {
   Id string
 }
 
+type IdList struct {
+  Cart string
+}
+
 func GetProducts() http.HandlerFunc {
   return func(w http.ResponseWriter, r *http.Request){
     connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
@@ -82,7 +86,7 @@ func GetProducts() http.HandlerFunc {
   }
 }
 
-func AddUser() http.HandlerFunc {
+func HandleUser() http.HandlerFunc {
   return func(w http.ResponseWriter, r *http.Request) {
     connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
     db, err := sql.Open("postgres", connStr)
@@ -92,6 +96,7 @@ func AddUser() http.HandlerFunc {
     defer db.Close()
 
     if r.Method == "POST" {
+      // create a new row in the users table
       r.ParseForm()
       username := strings.Join(r.Form["username"], "")
       password := strings.Join(r.Form["password"], "")
@@ -118,6 +123,7 @@ func AddUser() http.HandlerFunc {
     }
 
     if r.Method == "GET" {
+      // retrieve a row from the users table
       cookie, err := r.Cookie("sessionKey")
       if err != nil {
 
@@ -157,7 +163,7 @@ func AddUser() http.HandlerFunc {
   }
 }
 
-func AddItemToCart() http.HandlerFunc {
+func HandleCart() http.HandlerFunc {
   return func (w http.ResponseWriter, r *http.Request) {
     connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
     db, err := sql.Open("postgres", connStr)
@@ -173,6 +179,7 @@ func AddItemToCart() http.HandlerFunc {
     sessionKey := cookie.Value
 
     if r.Method == "GET" {
+      // Returns contents of users cart array
       formattedStatement := fmt.Sprintf(`SELECT products.id, products.name, products.price, cart FROM users
                                       INNER JOIN usersessions ON users.id=usersessions.userid
                                       LEFT JOIN products ON products.id=ANY(users.cart)
@@ -209,7 +216,8 @@ func AddItemToCart() http.HandlerFunc {
       w.Write(js)
     }
 
-    if r.Method == "PUT" {
+    if r.Method == "POST" {
+      // Add an item to a user's cart array
       decoder := json.NewDecoder(r.Body)
       var p TestStruct
       err := decoder.Decode(&p)
@@ -239,6 +247,40 @@ func AddItemToCart() http.HandlerFunc {
         w.Write([]byte("Item added to cart!"))
       }
     }
+
+
+    if r.Method == "PUT" {
+      // Remove one or more items from users cart array, or modify quantity
+      // of an item in the users cart array.
+      decoder := json.NewDecoder(r.Body)
+      var idList IdList
+      err := decoder.Decode(&idList)
+      if err != nil {
+        log.Printf("can't decode updated cart", err)
+      }
+      var newCart []string = strings.Split(idList.Cart, ",")
+      newCartIds := make([]int, len(newCart))
+        for i := 0; i < len(newCart); i++ {
+          newCartIds[i], err = strconv.Atoi(newCart[i])
+          if err != nil {
+            log.Printf("can't convert product id", err)
+          }
+        }
+      res, err := db.Exec("UPDATE users SET cart = $1 FROM usersessions WHERE users.id = usersessions.userid AND usersessions.sessionkey = $2", pq.Array(newCartIds), sessionKey)
+      if err != nil {
+        log.Printf("can't execute statement", err)
+      }
+      rowCnt, err := res.RowsAffected()
+      if err != nil {
+        log.Printf("can't get rows affected", err)
+      }
+      if rowCnt == 0 {
+        http.Error(w, "You need to log in to change items in your cart.", 403)
+      } else {
+        w.Write([]byte("Cart modified!"))
+      }
+    }
+
   }
 }
 

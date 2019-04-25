@@ -57,6 +57,7 @@ const displayTransactionData = function (products, transactionData) {
             orderRow.appendChild(placeholder);
         }
         let placeholder = document.createElement("td");
+        placeholder.textContent = "Total:";
         orderRow.appendChild(placeholder);
         placeholder = document.createElement("td");
         orderRow.appendChild(placeholder);
@@ -67,7 +68,6 @@ const displayTransactionData = function (products, transactionData) {
         orderRow.appendChild(subtotalPriceNode);
         let orderTime = document.createElement("td");
         var date = new Date(transactionData[i].Order_time);
-        console.log(date);
         orderTime.textContent = `${date.toDateString()} ${date.toLocaleTimeString()}`;
         orderRow.appendChild(orderTime);
         orderRow.classList.add("final-row");

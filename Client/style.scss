@@ -346,7 +346,16 @@ tbody {
 	border-bottom: 1px solid $tertiary-color;
 }
 
-.final-row {
+.product-quantity {
+	text-align: center;
+}
+
+#checkoutbtn {
+	margin: 0.5em;
+	font-size: 1.2em;
+}
+
+.final-row, .total-row {
 	border-top: 1px dotted $tertiary-color;
 	border-bottom: 1px solid $tertiary-color;
 }

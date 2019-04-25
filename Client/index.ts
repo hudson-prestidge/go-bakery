@@ -10,7 +10,7 @@ const addProductToCart = function (productId :Number) :void {
     popup.classList.remove("popping-up")
   })
 
-  updateCart.open("PUT", "/api/v1/users/cart")
+  updateCart.open("POST", "/api/v1/users/cart")
   updateCart.setRequestHeader("Content-Type", "application/json")
   updateCart.onload = function() {
    popupText.textContent = this.response

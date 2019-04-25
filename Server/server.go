@@ -9,8 +9,8 @@ import (
 func main() {
   mux := http.NewServeMux()
   mux.HandleFunc("/api/v1/products", db.GetProducts())
-  mux.HandleFunc("/api/v1/users", db.AddUser())
-  mux.HandleFunc("/api/v1/users/cart", db.AddItemToCart())
+  mux.HandleFunc("/api/v1/users", db.HandleUser())
+  mux.HandleFunc("/api/v1/users/cart", db.HandleCart())
   mux.HandleFunc("/api/v1/users/login", db.UserLogin())
   mux.HandleFunc("/logout", db.LogoutUser())
   mux.HandleFunc("/api/v1/transactions", db.HandleTransactions())
