@@ -40,12 +40,12 @@ type Transaction struct {
   Order_time string
 }
 
-type TestStruct struct {
+type JsonResponse struct {
   Id string
 }
 
 type IdList struct {
-  Cart string
+  List string
 }
 
 func GetProducts() http.HandlerFunc {
@@ -219,7 +219,7 @@ func HandleCart() http.HandlerFunc {
     if r.Method == "POST" {
       // Add an item to a user's cart array
       decoder := json.NewDecoder(r.Body)
-      var p TestStruct
+      var p JsonResponse
       err := decoder.Decode(&p)
       if err != nil {
         log.Printf("can't decode product id", err)
@@ -258,12 +258,14 @@ func HandleCart() http.HandlerFunc {
       if err != nil {
         log.Printf("can't decode updated cart", err)
       }
-      var newCart []string = strings.Split(idList.Cart, ",")
+      var newCart []string = strings.Split(idList.List, ",")
       newCartIds := make([]int, len(newCart))
         for i := 0; i < len(newCart); i++ {
-          newCartIds[i], err = strconv.Atoi(newCart[i])
-          if err != nil {
-            log.Printf("can't convert product id", err)
+          if newCart[i] != "" {
+            newCartIds[i], err = strconv.Atoi(newCart[i])
+            if err != nil {
+              log.Printf("can't convert product id", err)
+            }
           }
         }
       res, err := db.Exec("UPDATE users SET cart = $1 FROM usersessions WHERE users.id = usersessions.userid AND usersessions.sessionkey = $2", pq.Array(newCartIds), sessionKey)

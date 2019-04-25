@@ -130,5 +130,5 @@ const updateCart = function (itemQuantities :{[key:number] : number}) {
     console.log(JSON.stringify({"cart": `${newCart}`}))
     location.reload()
   }
-  updateCartRequest.send(JSON.stringify({"cart": `${newCart}`}))
+  updateCartRequest.send(JSON.stringify({"list": `${newCart}`}))
 }
