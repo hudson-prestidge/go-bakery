@@ -56,14 +56,18 @@ const displayTransactionData = function (products, transactionData) {
             let placeholder = document.createElement("td");
             orderRow.appendChild(placeholder);
         }
-        console.log(orderRow);
-        let subtotalPriceNode = document.createElement("td");
         let placeholder = document.createElement("td");
         orderRow.appendChild(placeholder);
         placeholder = document.createElement("td");
         orderRow.appendChild(placeholder);
+        placeholder = document.createElement("td");
+        orderRow.appendChild(placeholder);
+        let subtotalPriceNode = document.createElement("td");
         subtotalPriceNode.textContent = `$${subtotalPrice.toFixed(2)}`;
         orderRow.appendChild(subtotalPriceNode);
+        let orderTime = document.createElement("td");
+        orderTime.textContent = transactionData[i].Order_time.toString();
+        orderRow.appendChild(orderTime);
         orderList.appendChild(orderRow);
     }
 };

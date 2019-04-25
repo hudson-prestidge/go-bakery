@@ -37,6 +37,7 @@ type User struct {
 type Transaction struct {
   Id int
   Product_list pq.Int64Array
+  Order_time string
 }
 
 type TestStruct struct {
@@ -330,7 +331,7 @@ func HandleTransactions() http.HandlerFunc {
     defer tx.Commit()
 
     if r.Method == "GET" {
-      formattedStatement := fmt.Sprintf(`SELECT transactions.id, product_list FROM transactions
+      formattedStatement := fmt.Sprintf(`SELECT transactions.id, product_list, order_time FROM transactions
                                       INNER JOIN users ON users.id=transactions.user_id
                                       INNER JOIN usersessions ON users.id=usersessions.userid
                                       WHERE sessionKey='%s'`, sessionKey)
@@ -341,17 +342,18 @@ func HandleTransactions() http.HandlerFunc {
       var (
           transaction_id int
           product_list pq.Int64Array
+          order_time string
         )
       w.Header().Set("Content-Type", "application/json")
       w.WriteHeader(http.StatusCreated)
       defer rows.Close()
       var data []Transaction
       for rows.Next() {
-        err := rows.Scan(&transaction_id, &product_list)
+        err := rows.Scan(&transaction_id, &product_list, &order_time)
         if err != nil {
           log.Printf("?", err)
         }
-        t := Transaction{Id: transaction_id, Product_list: product_list}
+        t := Transaction{Id: transaction_id, Product_list: product_list, Order_time: order_time}
         data = append(data, t)
       }
       js, err := json.Marshal(data)
@@ -362,12 +364,12 @@ func HandleTransactions() http.HandlerFunc {
     }
 
     if r.Method == "POST" {
-      formattedStatement := fmt.Sprintf(`INSERT INTO transactions(user_id, product_list)
-                                      SELECT id, cart
+      formattedStatement := fmt.Sprintf(`INSERT INTO transactions(user_id, product_list, order_time)
+                                      SELECT id, cart, '%s'
                                       FROM users INNER JOIN usersessions
                                       ON users.id=usersessions.userid
                                       WHERE sessionkey='%s'
-                                      AND array_length(cart, 1) > 0`, sessionKey)
+                                      AND array_length(cart, 1) > 0`, time.Now().Format(time.RFC3339), sessionKey)
       stmt, err := tx.Prepare(formattedStatement)
       if err != nil {
         log.Printf("?", err)
