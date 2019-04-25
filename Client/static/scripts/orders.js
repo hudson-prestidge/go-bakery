@@ -32,6 +32,7 @@ const displayTransactionData = function (products, transactionData) {
     }
     const orderList = document.querySelector("#order-list");
     for (let i = 0; i < itemQuantities.length; i++) {
+        let subtotalPrice = 0;
         let orderRow = document.createElement("tr");
         orderRow.classList.add("order-row");
         let orderNumber = document.createElement("td");
@@ -45,6 +46,7 @@ const displayTransactionData = function (products, transactionData) {
             productQuantity.textContent = itemQuantities[i][key].toString();
             let productPrice = document.createElement("td");
             productPrice.textContent = `$${(product.Price / 100 * itemQuantities[i][key]).toFixed(2)}`;
+            subtotalPrice += product.Price / 100 * itemQuantities[i][key];
             orderRow.appendChild(productName);
             orderRow.appendChild(productQuantity);
             orderRow.appendChild(productPrice);
@@ -54,6 +56,15 @@ const displayTransactionData = function (products, transactionData) {
             let placeholder = document.createElement("td");
             orderRow.appendChild(placeholder);
         }
+        console.log(orderRow);
+        let subtotalPriceNode = document.createElement("td");
+        let placeholder = document.createElement("td");
+        orderRow.appendChild(placeholder);
+        placeholder = document.createElement("td");
+        orderRow.appendChild(placeholder);
+        subtotalPriceNode.textContent = `$${subtotalPrice.toFixed(2)}`;
+        orderRow.appendChild(subtotalPriceNode);
+        orderList.appendChild(orderRow);
     }
 };
 //# sourceMappingURL=orders.js.map

@@ -44,8 +44,8 @@ const displayTransactionData = function (products :Product[], transactionData :T
     }
   }
   const orderList = document.querySelector("#order-list")
-  // let subtotalPrice :number = 0
   for(let i = 0; i < itemQuantities.length; i++) {
+    let subtotalPrice :number = 0
     let orderRow = document.createElement("tr")
     orderRow.classList.add("order-row")
 
@@ -62,7 +62,7 @@ const displayTransactionData = function (products :Product[], transactionData :T
       let productPrice = document.createElement("td")
       productPrice.textContent = `$${(product.Price/100 * itemQuantities[i][key]).toFixed(2)}`
 
-      // subtotalPrice += product.Price/100 * itemQuantities[i][key]
+      subtotalPrice += product.Price/100 * itemQuantities[i][key]
       orderRow.appendChild(productName)
       orderRow.appendChild(productQuantity)
       orderRow.appendChild(productPrice)
@@ -72,8 +72,14 @@ const displayTransactionData = function (products :Product[], transactionData :T
       let placeholder = document.createElement("td")
       orderRow.appendChild(placeholder)
     }
-    // let subtotalPriceNode = document.createElement("td")
-    // subtotalPriceNode.textContent = `$${subtotalPrice.toFixed(2)}`
-    // orderRow.appendChild(subtotalPriceNode)
+    console.log(orderRow)
+    let subtotalPriceNode = document.createElement("td")
+    let placeholder = document.createElement("td")
+    orderRow.appendChild(placeholder)
+    placeholder = document.createElement("td")
+    orderRow.appendChild(placeholder)
+    subtotalPriceNode.textContent = `$${subtotalPrice.toFixed(2)}`
+    orderRow.appendChild(subtotalPriceNode)
+    orderList.appendChild(orderRow)
   }
 }
