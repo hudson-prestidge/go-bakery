@@ -54,7 +54,7 @@ const setupCartList = function (products, itemQuantities) {
     let totalRow = document.createElement("tr");
     totalRow.classList.add("total-row");
     let namePlaceholder = document.createElement("td");
-    namePlaceholder.textContent = "total:";
+    namePlaceholder.textContent = "Total:";
     let quantityPlaceholder = document.createElement("td");
     let totalPrice = document.createElement("td");
     totalPrice.textContent = `$${subtotalPrice.toFixed(2)}`;

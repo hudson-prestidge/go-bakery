@@ -71,7 +71,7 @@ const setupCartList = function(products:Product[], itemQuantities:{[Id:number] :
   totalRow.classList.add("total-row")
 
   let namePlaceholder = document.createElement("td")
-  namePlaceholder.textContent = "total:"
+  namePlaceholder.textContent = "Total:"
 
   let quantityPlaceholder = document.createElement("td")
 

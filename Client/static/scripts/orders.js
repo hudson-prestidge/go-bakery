@@ -66,8 +66,11 @@ const displayTransactionData = function (products, transactionData) {
         subtotalPriceNode.textContent = `$${subtotalPrice.toFixed(2)}`;
         orderRow.appendChild(subtotalPriceNode);
         let orderTime = document.createElement("td");
-        orderTime.textContent = transactionData[i].Order_time.toString();
+        var date = new Date(transactionData[i].Order_time);
+        console.log(date);
+        orderTime.textContent = `${date.toDateString()} ${date.toLocaleTimeString()}`;
         orderRow.appendChild(orderTime);
+        orderRow.classList.add("final-row");
         orderList.appendChild(orderRow);
     }
 };
