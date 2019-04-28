@@ -195,10 +195,9 @@ aside {
 
 .add-product-button {
   animation-fill-mode: forwards;
-  transform: translateY(100%);
   position: absolute;
-  bottom: 0%;
-  right: 20%;
+  top: 100%;
+  right: 15%;
 }
 
 .product-id {
@@ -206,10 +205,20 @@ aside {
 }
 
 .product-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em;
   animation-fill-mode: forwards;
   transform: translateY(-100%);
+  min-width: 12em;
   top: 0;
   position: absolute;
+  border-radius: 5px;
+  background-color: #033f63;
+  color: #b6dcfe;
+  font-family: "Cabin", sans-serif;
+  height: 3em;
 }
 
 .disclaimer {
@@ -367,13 +376,21 @@ tbody {
 }
 
 #notification-popup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: fixed;
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background-color: red;
-  height: 3em;
-  width: 10em;
+  background-color: #033f63;
+  color: #b6dcfe;
+  border: 1px solid #313638;
+  box-shadow: 1px 1px black;
+  border-radius: 5px;
+  padding: 1em;
+  height: 4em;
+  width: 12em;
 }
 
 .popping-up {
@@ -395,7 +412,7 @@ tbody {
 }
 @keyframes slideUp {
   from {
-    transform: translateY(100%);
+    transform: translateY(0);
   }
   to {
     transform: translateY(-100%);
@@ -406,7 +423,7 @@ tbody {
     transform: translateY(-100%);
   }
   to {
-    transform: translateY(100%);
+    transform: translateY(0);
   }
 }
 @media (max-height: 750px) {

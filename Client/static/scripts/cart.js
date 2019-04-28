@@ -61,7 +61,8 @@ const setupCartList = function (products, itemQuantities) {
         removeFromCartButton.textContent = "Remove From Cart";
         let buttonCell = document.createElement("td");
         removeFromCartButton.addEventListener('click', function (e) {
-            itemQuantities[p.Id] = 0;
+            delete itemQuantities[p.Id];
+            console.log(itemQuantities);
             updateCart(itemQuantities);
         });
         buttonCell.appendChild(removeFromCartButton);
@@ -89,7 +90,7 @@ const setupCartList = function (products, itemQuantities) {
 const updateCart = function (itemQuantities) {
     let newCart = [];
     for (let key in itemQuantities) {
-        while (itemQuantities[key] > 0) {
+        while (itemQuantities[key] > 0 && key != '0') {
             newCart.push(Number(key));
             itemQuantities[key]--;
         }
@@ -98,7 +99,6 @@ const updateCart = function (itemQuantities) {
     updateCartRequest.open("PUT", "/api/v1/users/cart");
     updateCartRequest.setRequestHeader("Content-Type", "application/json");
     updateCartRequest.onload = function () {
-        console.log(JSON.stringify({ "cart": `${newCart}` }));
         location.reload();
     };
     updateCartRequest.send(JSON.stringify({ "list": `${newCart}` }));
