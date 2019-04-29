@@ -6,6 +6,13 @@ const getTransactionData = function (callback) {
     getTransactions.open("GET", "/api/v1/transactions");
     getTransactions.onload = function () {
         const transactionData = JSON.parse(this.response);
+        if (transactionData == null) {
+            const popup = document.querySelector("#notification-popup");
+            const popupText = document.querySelector(".notification-text");
+            popupText.textContent = "No transaction data to display - try buying something!";
+            popup.classList.add("popping-up");
+            return;
+        }
         const getProducts = new XMLHttpRequest();
         getProducts.open("GET", "/api/v1/products");
         getProducts.onload = function () {

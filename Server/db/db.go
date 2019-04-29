@@ -266,6 +266,22 @@ func HandleCart() http.HandlerFunc {
             if err != nil {
               log.Printf("can't convert product id", err)
             }
+          } else {
+            // recieved empty cart variable, resetting user cart
+            res, err := db.Exec("UPDATE users SET cart = '{}' FROM usersessions WHERE users.id = usersessions.userid AND usersessions.sessionkey = $1", sessionKey)
+            if err != nil {
+              log.Printf("can't execute statement", err)
+            }
+            rowCnt, err := res.RowsAffected()
+            if err != nil {
+              log.Printf("can't get rows affected", err)
+            }
+            if rowCnt == 0 {
+              http.Error(w, "You need to log in to change items in your cart.", 403)
+              } else {
+                w.Write([]byte("Cart modified!"))
+              }
+              return
           }
         }
       res, err := db.Exec("UPDATE users SET cart = $1 FROM usersessions WHERE users.id = usersessions.userid AND usersessions.sessionkey = $2", pq.Array(newCartIds), sessionKey)
@@ -278,9 +294,9 @@ func HandleCart() http.HandlerFunc {
       }
       if rowCnt == 0 {
         http.Error(w, "You need to log in to change items in your cart.", 403)
-      } else {
-        w.Write([]byte("Cart modified!"))
-      }
+        } else {
+          w.Write([]byte("Cart modified!"))
+        }
     }
 
   }
@@ -433,6 +449,7 @@ func HandleTransactions() http.HandlerFunc {
       if err != nil {
         log.Printf("?", err)
       }
+      w.Write([]byte("Transaction successful!"))
     }
   }
 }

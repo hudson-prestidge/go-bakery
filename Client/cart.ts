@@ -16,18 +16,24 @@ const retrieveCartProducts = function (callback?: (products:Product[], itemQuant
   const getCart = new XMLHttpRequest
   getCart.open("GET", "/api/v1/users/cart")
   getCart.onload = function() {
-    const cartData = JSON.parse(this.response)
-    const items = cartData.Items
+    let cartData
+    try{
+      cartData = JSON.parse(this.response)
+    }
+    catch (e) {
+      return
+    }
+      const items = cartData.Items
+      const products = cartData.Products
+      const itemQuantities:{[Id:number] : number} = {}
+      products.forEach(function(p :Product){
+        itemQuantities[p.Id] = 0
+      })
+      items.forEach(function(n :number) {
+        itemQuantities[n] += 1
+      })
+      callback(products, itemQuantities)
 
-    const products = cartData.Products
-    const itemQuantities:{[Id:number] : number} = {}
-    products.forEach(function(p :Product){
-      itemQuantities[p.Id] = 0
-    })
-    items.forEach(function(n :number) {
-      itemQuantities[n] += 1
-    })
-    callback(products, itemQuantities)
   }
   getCart.onerror = function(err) {
     console.log(err)
@@ -81,8 +87,7 @@ const setupCartList = function(products:Product[], itemQuantities:{[Id:number] :
     let buttonCell = document.createElement("td")
 
     removeFromCartButton.addEventListener('click', function(e) {
-      delete itemQuantities[p.Id]
-      console.log(itemQuantities)
+      itemQuantities[p.Id] = 0
       updateCart(itemQuantities)
     })
 
@@ -119,9 +124,9 @@ const setupCartList = function(products:Product[], itemQuantities:{[Id:number] :
 const updateCart = function (itemQuantities :{[key:number] : number}) {
   let newCart :number[] = []
   for(let key in itemQuantities) {
-    while ( itemQuantities[key] > 0 && key != '0') {
-      newCart.push(Number(key))
-      itemQuantities[key]--
+    while (itemQuantities.hasOwnProperty(key) && itemQuantities[key] > 0) {
+      newCart.push(parseInt(key, 10))
+      itemQuantities[key] --
     }
   }
   const updateCartRequest = new XMLHttpRequest
