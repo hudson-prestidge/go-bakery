@@ -34,6 +34,11 @@ type User struct {
   Cart []int
 }
 
+type LoginDetails struct {
+  Username string
+  Password string
+}
+
 type Transaction struct {
   Id int
   Product_list pq.Int64Array
@@ -304,9 +309,14 @@ func HandleCart() http.HandlerFunc {
 
 func UserLogin() http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
-      r.ParseForm()
-      username := strings.Join(r.Form["username"], "")
-      password := strings.Join(r.Form["password"], "")
+      decoder := json.NewDecoder(r.Body)
+      var userDetails LoginDetails
+      err := decoder.Decode(&userDetails)
+      if err != nil {
+        log.Printf("can't decode login details", err)
+      }
+      username := userDetails.Username
+      password := userDetails.Password
       connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
       db, err := sql.Open("postgres", connStr)
       defer db.Close()
@@ -340,7 +350,7 @@ func UserLogin() http.HandlerFunc {
       rows.Close()
       err = bcrypt.CompareHashAndPassword([]byte(currentUser.Passwordhash), []byte(password))
       if err != nil {
-        http.Redirect(w, r, "/login.html?attempt=failed", 303)
+        http.Error(w, "Invalid username or password.", 403)
       } else {
         sessionKey, err := generateRandomString(50)
         if err != nil {
@@ -358,7 +368,7 @@ func UserLogin() http.HandlerFunc {
         cookieExpiration := time.Now().Add(time.Hour)
         cookie := http.Cookie{Name:"sessionKey" , Value: sessionKey, Path:"/", Expires: cookieExpiration, HttpOnly: true}
         http.SetCookie(w, &cookie)
-        http.Redirect(w, r, "/", 303)
+        w.Write([]byte("Login successful!"))
       }
     }
 }
