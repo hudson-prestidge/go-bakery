@@ -59,7 +59,7 @@ const signupUser = function() {
       loginRequest.send(JSON.stringify({"username": `${username}`, "password": `${password}`}))
     }
 
-    if(signupRequest.status == 403) {
+    if(signupRequest.status == 409) {
       popupText.textContent = this.response
       popup.classList.add("popping-up")
     }

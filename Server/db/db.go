@@ -127,7 +127,8 @@ func HandleUser() http.HandlerFunc {
       }
       _, err = stmt.Exec()
       if err != nil {
-        log.Printf("?", err)
+        http.Error(w, "Username in use, try another one.", 403)
+        return
       }
       w.Write([]byte("User successfully created!"))
     }
@@ -137,7 +138,7 @@ func HandleUser() http.HandlerFunc {
       cookie, err := r.Cookie("sessionKey")
       if err != nil {
 
-        http.Error(w, `{ "error": "not logged in"}`, 403)
+        http.Error(w, `{ "error": "not logged in"}`, 409)
         return
       } else {
         sessionKey := cookie.Value
