@@ -372,7 +372,7 @@ func UserLogin() http.HandlerFunc {
           log.Printf("?", err)
         }
         cookieExpiration := time.Now().Add(time.Hour)
-        cookie := http.Cookie{Name:"sessionKey" , Value: sessionKey, Path:"/", Expires: cookieExpiration, HttpOnly: true}
+        cookie := http.Cookie{Name:"sessionKey" , Value: sessionKey, Path:"/", Expires: cookieExpiration, HttpOnly: true, SameSite: http.SameSiteStrictMode, Secure: true}
         http.SetCookie(w, &cookie)
         w.Write([]byte("Login successful!"))
       }
@@ -381,7 +381,7 @@ func UserLogin() http.HandlerFunc {
 
 func LogoutUser() http.HandlerFunc{
   return func(w http.ResponseWriter, r *http.Request) {
-    cookie := http.Cookie{Name:"sessionKey", Value: "", MaxAge: -1, Path:"/" , HttpOnly: true}
+    cookie := http.Cookie{Name:"sessionKey", Value: "", MaxAge: -1, Path:"/" , HttpOnly: true, SameSite: http.SameSiteStrictMode, Secure: true}
     http.SetCookie(w, &cookie)
     http.Redirect(w, r, "/index.html", 303)
   }
