@@ -327,17 +327,17 @@ func UserLogin() http.HandlerFunc {
       db, err := sql.Open("postgres", connStr)
       defer db.Close()
       if err != nil {
-        log.Printf("?", err)
+        log.Printf("Can't establish database connection", err)
       }
       tx, err := db.Begin()
       defer tx.Commit()
       if err != nil {
-        log.Printf("?", err)
+        log.Printf("Can't create database transaction", err)
       }
       query := fmt.Sprintf("SELECT id, username, passwordhash, isdisabled FROM users WHERE username='%s'", username)
       rows, err := tx.Query(query)
       if err != nil {
-        log.Printf("?", err)
+        log.Printf("Error querying database: ", err)
       }
       var currentUser User
       for rows.Next() {
@@ -365,11 +365,11 @@ func UserLogin() http.HandlerFunc {
         formattedStatement := fmt.Sprintf("INSERT INTO usersessions(sessionkey, userid, logintime, lastseentime) VALUES('%s', %d, NOW(), NOW())", sessionKey, currentUser.Id)
         stmt, err := tx.Prepare(formattedStatement)
         if err != nil {
-          log.Printf("?", err)
+          log.Printf("Couldn't prepare sql statement: ", err)
         }
         _, err = stmt.Exec()
         if err != nil {
-          log.Printf("?", err)
+          log.Printf("Couldn't insert into usersessions table: ", err)
         }
         cookieExpiration := time.Now().Add(time.Hour)
         cookie := http.Cookie{Name:"sessionKey" , Value: sessionKey, Path:"/", Expires: cookieExpiration, HttpOnly: true, SameSite: http.SameSiteStrictMode, Secure: true}
@@ -379,7 +379,7 @@ func UserLogin() http.HandlerFunc {
     }
 }
 
-func LogoutUser() http.HandlerFunc{
+func UserLogout() http.HandlerFunc{
   return func(w http.ResponseWriter, r *http.Request) {
     cookie := http.Cookie{Name:"sessionKey", Value: "", MaxAge: -1, Path:"/" , HttpOnly: true, SameSite: http.SameSiteStrictMode, Secure: true}
     http.SetCookie(w, &cookie)
@@ -392,28 +392,29 @@ func HandleTransactions() http.HandlerFunc {
     connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
     db, err := sql.Open("postgres", connStr)
     if err != nil {
-      log.Printf("?", err)
+      log.Printf("Couldn't open database connection: ", err)
     }
     defer db.Close()
     cookie, err := r.Cookie("sessionKey")
     if err != nil {
-      log.Printf("?", err)
+      log.Printf("Couldn't access sessionKey cookie: ", err)
     }
     sessionKey := cookie.Value
     tx, err := db.Begin()
     if err != nil {
-      log.Printf("?", err)
+      log.Printf("Couldn't create database transaction: ", err)
     }
     defer tx.Commit()
 
     if r.Method == "GET" {
+      //returns all transactions for a given user
       formattedStatement := fmt.Sprintf(`SELECT transactions.id, product_list, order_time FROM transactions
                                       INNER JOIN users ON users.id=transactions.user_id
                                       INNER JOIN usersessions ON users.id=usersessions.userid
                                       WHERE sessionKey='%s'`, sessionKey)
       rows, err := tx.Query(formattedStatement)
       if err != nil {
-        log.Printf("?", err)
+        log.Printf("Couldn't query transactions table: ", err)
       }
       var (
           transaction_id int
@@ -427,19 +428,20 @@ func HandleTransactions() http.HandlerFunc {
       for rows.Next() {
         err := rows.Scan(&transaction_id, &product_list, &order_time)
         if err != nil {
-          log.Printf("?", err)
+          log.Printf("Error scanning transaction table rows: ", err)
         }
         t := Transaction{Id: transaction_id, Product_list: product_list, Order_time: order_time}
         data = append(data, t)
       }
       js, err := json.Marshal(data)
       if err != nil {
-        log.Printf("?", err)
+        log.Printf("Couldn't marshal transactions into json: ", err)
       }
       w.Write(js)
     }
 
     if r.Method == "POST" {
+      // insert a row into transactions table for the logged in user
       formattedStatement := fmt.Sprintf(`INSERT INTO transactions(user_id, product_list, order_time)
                                       SELECT id, cart, '%s'
                                       FROM users INNER JOIN usersessions
@@ -448,22 +450,22 @@ func HandleTransactions() http.HandlerFunc {
                                       AND array_length(cart, 1) > 0`, time.Now().Format(time.RFC3339), sessionKey)
       stmt, err := tx.Prepare(formattedStatement)
       if err != nil {
-        log.Printf("?", err)
+        log.Printf("Couldn't prepare sql statement: ", err)
       }
       _, err = stmt.Exec()
       if err != nil {
-        log.Printf("?", err)
+        log.Printf("Couldn't insert into transactions table: ", err)
       }
       formattedStatement = fmt.Sprintf(`UPDATE users SET cart = '{}' FROM usersessions
                                     WHERE users.id = usersessions.userid
                                     AND usersessions.sessionkey = '%s' `, sessionKey)
       stmt, err = tx.Prepare(formattedStatement)
       if err != nil {
-        log.Printf("?", err)
+        log.Printf("Couldn't prepare sql statement: ", err)
       }
       _, err = stmt.Exec()
       if err != nil {
-        log.Printf("?", err)
+        log.Printf("Couldn't empty cart after transaction: ", err)
       }
       w.Write([]byte("Transaction successful!"))
     }

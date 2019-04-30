@@ -15,7 +15,7 @@ func main() {
   mux.HandleFunc("/api/v1/users", db.HandleUser())
   mux.HandleFunc("/api/v1/users/cart", db.HandleCart())
   mux.HandleFunc("/api/v1/users/login", db.UserLogin())
-  mux.HandleFunc("/logout", db.LogoutUser())
+  mux.HandleFunc("/logout", db.UserLogout())
   mux.HandleFunc("/api/v1/transactions", db.HandleTransactions())
   mux.HandleFunc("/", myfileserver)
 
