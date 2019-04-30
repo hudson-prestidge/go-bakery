@@ -6,10 +6,6 @@ window.onload = function () {
     });
     const loginButton = document.querySelector("#form-login-btn");
     loginButton.addEventListener('click', authenticateUser);
-    if (getUrlParameter('attempt') === 'failed') {
-        popupText.textContent = "Invalid username or password";
-        popup.classList.add("popping-up");
-    }
 };
 const authenticateUser = function () {
     const popup = document.querySelector("#notification-popup");
@@ -34,11 +30,4 @@ const authenticateUser = function () {
     };
     loginRequest.send(JSON.stringify({ "username": `${username}`, "password": `${password}` }));
 };
-function getUrlParameter(name) {
-    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-    var results = regex.exec(location.search);
-    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-}
-;
 //# sourceMappingURL=login.js.map

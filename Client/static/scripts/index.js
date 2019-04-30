@@ -1,5 +1,11 @@
 window.onload = function () {
+    const popup = document.querySelector("#notification-popup");
+    const popupText = document.querySelector(".notification-text");
     getProductData(setupProductWindows);
+    if (getUrlParameter('transaction') === 'complete') {
+        popupText.textContent = "Order successful!";
+        popup.classList.add("popping-up");
+    }
 };
 const addProductToCart = function (productId) {
     const updateCart = new XMLHttpRequest();
@@ -68,4 +74,11 @@ const shuffleArray = function (arr) {
     }
     return newArr;
 };
+function getUrlParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+;
 //# sourceMappingURL=index.js.map

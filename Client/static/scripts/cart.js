@@ -1,8 +1,12 @@
 window.onload = function () {
     retrieveCartProducts(setupCartList);
     getUserData();
+    const popup = document.querySelector("#notification-popup");
     const checkoutButton = document.querySelector('#checkoutbtn');
     checkoutButton.addEventListener('click', checkout);
+    popup.addEventListener("animationend", function () {
+        popup.classList.remove("popping-up");
+    });
 };
 const retrieveCartProducts = function (callback) {
     const getCart = new XMLHttpRequest;
@@ -35,7 +39,7 @@ const checkout = function () {
     const checkoutCart = new XMLHttpRequest;
     checkoutCart.open("POST", "/api/v1/transactions");
     checkoutCart.onload = function () {
-        window.location.replace("/");
+        window.location.replace("/?transaction=complete");
     };
     checkoutCart.send();
 };
@@ -57,6 +61,13 @@ const setupCartList = function (products, itemQuantities) {
         let updateQuantityCell = document.createElement("td");
         updateQuantityCell.appendChild(updateQuantityButton);
         updateQuantityButton.addEventListener('click', function () {
+            if (!isNumber(productQuantity.value)) {
+                const popup = document.querySelector("#notification-popup");
+                const popupText = document.querySelector(".notification-text");
+                popupText.textContent = "Invalid number of items.";
+                popup.classList.add("popping-up");
+                return;
+            }
             itemQuantities[p.Id] = Number(productQuantity.value);
             updateCart(itemQuantities);
         });
@@ -107,5 +118,9 @@ const updateCart = function (itemQuantities) {
         location.reload();
     };
     updateCartRequest.send(JSON.stringify({ "list": `${newCart}` }));
+};
+const isNumber = function (s) {
+    const numRegex = /^[0-9]*$/;
+    return numRegex.test(s);
 };
 //# sourceMappingURL=cart.js.map

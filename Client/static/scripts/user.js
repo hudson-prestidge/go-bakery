@@ -15,7 +15,8 @@ const getUserData = function () {
         loginLogoutLink.setAttribute("href", "/logout");
         loginLogoutLink.textContent = "Logout";
         const signupLink = document.querySelector("#signup-link");
-        signupLink.style.display = "none";
+        signupLink.setAttribute("href", "/orderhistory.html");
+        signupLink.textContent = "Orders";
     };
     getUsers.onerror = function (err) {
         console.log(err);

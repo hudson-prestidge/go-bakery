@@ -17,7 +17,8 @@ const getUserData = function() :void{
     loginLogoutLink.textContent = "Logout"
 
     const signupLink = <HTMLElement> document.querySelector("#signup-link")
-    signupLink.style.display = "none"
+    signupLink.setAttribute("href", "/orderhistory.html")
+    signupLink.textContent = "Orders"
   }
   getUsers.onerror = function(err) {
     console.log(err)
