@@ -4,7 +4,7 @@ window.onload = function () {
     popup.addEventListener("animationend", function () {
         popup.classList.remove("popping-up");
     });
-    const loginButton = document.querySelector("#form-login-btn");
+    const loginButton = document.querySelector("#form-submit-btn");
     loginButton.addEventListener('click', authenticateUser);
 };
 const authenticateUser = function () {

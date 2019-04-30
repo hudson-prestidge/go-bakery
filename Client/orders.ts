@@ -1,4 +1,4 @@
-window.onload = function() {
+window.onload = function() :void {
   getTransactionData(displayTransactionData)
 }
 
@@ -18,7 +18,7 @@ const getTransactionData = function (callback?: (products :Product[], transactio
   const getTransactions = new XMLHttpRequest()
   getTransactions.open("GET", "/api/v1/transactions")
   getTransactions.onload = function () {
-    const transactionData = JSON.parse(this.response)
+    const transactionData :Transaction[] = JSON.parse(this.response)
     if (transactionData == null) {
       const popup = document.querySelector("#notification-popup")
       const popupText = document.querySelector(".notification-text")
@@ -28,8 +28,8 @@ const getTransactionData = function (callback?: (products :Product[], transactio
     }
     const getProducts = new XMLHttpRequest()
     getProducts.open("GET", "/api/v1/products")
-    getProducts.onload = function () {
-      let products = JSON.parse(this.response)
+    getProducts.onload = function () :void {
+      let products :Product[] = JSON.parse(this.response)
       callback(products, transactionData)
     }
     getProducts.send()

@@ -1,30 +1,30 @@
-window.onload = function () {
+window.onload = function () :void {
   const popup = document.querySelector("#notification-popup")
   const popupText = document.querySelector(".notification-text")
-  popup.addEventListener("animationend", function() {
+  popup.addEventListener("animationend", function() :void {
     popup.classList.remove("popping-up")
   })
-  var signupButton = document.querySelector("#signup-submit-btn")
+  var signupButton = document.querySelector("#form-submit-btn")
   signupButton.addEventListener("click", signupUser)
 }
 
-const signupUser = function() {
+const signupUser = function() :void {
   const popup = document.querySelector("#notification-popup")
   const popupText = document.querySelector(".notification-text")
-  const usernameField = <HTMLInputElement> document.querySelector("#signup-username-field")
+  const usernameField = <HTMLInputElement> document.querySelector("#form-username-field")
   const username = usernameField.value
-  const passwordField = <HTMLInputElement> document.querySelector("#signup-password-field")
+  const passwordField = <HTMLInputElement> document.querySelector("#form-password-field")
   const password = passwordField.value
-  const passwordRepeatField = <HTMLInputElement> document.querySelector("#signup-password-repeat-field")
+  const passwordRepeatField = <HTMLInputElement> document.querySelector("#form-password-repeat-field")
   const passwordRepeat = passwordRepeatField.value
 
-  if (username.length > 20 || username.length == 0 || !checkAlphanumeric(username)) {
+  if (username.length > 20 || username.length == 0 || !isAlphanumeric(username)) {
     popupText.textContent = "Usernames must be 1-20 characters long and only contain letters and numbers."
     popup.classList.add("popping-up")
     return
   }
 
-  if (password.length < 4 || !checkAlphanumeric(password)) {
+  if (password.length < 4 || !isAlphanumeric(password)) {
     popupText.textContent = "Password must be at least four characters long and only contain letters and numbers."
     popup.classList.add("popping-up")
     return
@@ -44,7 +44,7 @@ const signupUser = function() {
 
   const signupRequest = new XMLHttpRequest
   signupRequest.open("POST", "/api/v1/users")
-  signupRequest.onload = function() {
+  signupRequest.onload = function() :void {
     if(signupRequest.status == 200) {
       const loginRequest = new XMLHttpRequest
       loginRequest.open("POST", "/api/v1/users/login")
@@ -53,7 +53,7 @@ const signupUser = function() {
           window.location.replace("/")
         }
       }
-      loginRequest.onerror = function (err) {
+      loginRequest.onerror = function (err) :void {
         console.log(err)
       }
       loginRequest.send(JSON.stringify({"username": `${username}`, "password": `${password}`}))
@@ -64,13 +64,13 @@ const signupUser = function() {
       popup.classList.add("popping-up")
     }
   }
-  signupRequest.onerror = function (err) {
+  signupRequest.onerror = function (err) :void {
     console.log(err)
   }
   signupRequest.send(JSON.stringify({"username": `${username}`, "password": `${password}`}))
 }
 
-const checkAlphanumeric = function(s :string) {
+const isAlphanumeric = function(s :string) :boolean {
   const alphaNumRegex = /^[a-zA-Z0-9]*$/
   return alphaNumRegex.test(s)
 }

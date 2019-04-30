@@ -2,8 +2,6 @@ window.onload = function () {
     retrieveCartProducts(setupCartList);
     getUserData();
     const popup = document.querySelector("#notification-popup");
-    const checkoutButton = document.querySelector('#checkoutbtn');
-    checkoutButton.addEventListener('click', checkout);
     popup.addEventListener("animationend", function () {
         popup.classList.remove("popping-up");
     });
@@ -17,6 +15,8 @@ const retrieveCartProducts = function (callback) {
             cartData = JSON.parse(this.response);
         }
         catch (e) {
+            const checkoutButton = document.querySelector("#checkoutbtn");
+            checkoutButton.addEventListener('click', noItemsPopup);
             return;
         }
         const items = cartData.Items;
@@ -45,6 +45,8 @@ const checkout = function () {
 };
 const setupCartList = function (products, itemQuantities) {
     const cartList = document.querySelector("#cart-list");
+    const checkoutButton = document.querySelector("#checkoutbtn");
+    checkoutButton.addEventListener('click', checkout);
     let subtotalPrice = 0;
     products.forEach(function (p) {
         let productRow = document.createElement("tr");
@@ -102,6 +104,12 @@ const setupCartList = function (products, itemQuantities) {
     totalPrice.textContent = `$${subtotalPrice.toFixed(2)}`;
     totalRow.appendChild(totalPrice);
     cartList.appendChild(totalRow);
+};
+const noItemsPopup = function () {
+    const popup = document.querySelector("#notification-popup");
+    const popupText = document.querySelector(".notification-text");
+    popupText.textContent = "Add a product to your cart to check out!";
+    popup.classList.add("popping-up");
 };
 const updateCart = function (itemQuantities) {
     let newCart = [];

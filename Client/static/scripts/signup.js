@@ -4,24 +4,24 @@ window.onload = function () {
     popup.addEventListener("animationend", function () {
         popup.classList.remove("popping-up");
     });
-    var signupButton = document.querySelector("#signup-submit-btn");
+    var signupButton = document.querySelector("#form-submit-btn");
     signupButton.addEventListener("click", signupUser);
 };
 const signupUser = function () {
     const popup = document.querySelector("#notification-popup");
     const popupText = document.querySelector(".notification-text");
-    const usernameField = document.querySelector("#signup-username-field");
+    const usernameField = document.querySelector("#form-username-field");
     const username = usernameField.value;
-    const passwordField = document.querySelector("#signup-password-field");
+    const passwordField = document.querySelector("#form-password-field");
     const password = passwordField.value;
-    const passwordRepeatField = document.querySelector("#signup-password-repeat-field");
+    const passwordRepeatField = document.querySelector("#form-password-repeat-field");
     const passwordRepeat = passwordRepeatField.value;
-    if (username.length > 20 || username.length == 0 || !checkAlphanumeric(username)) {
+    if (username.length > 20 || username.length == 0 || !isAlphanumeric(username)) {
         popupText.textContent = "Usernames must be 1-20 characters long and only contain letters and numbers.";
         popup.classList.add("popping-up");
         return;
     }
-    if (password.length < 4 || !checkAlphanumeric(password)) {
+    if (password.length < 4 || !isAlphanumeric(password)) {
         popupText.textContent = "Password must be at least four characters long and only contain letters and numbers.";
         popup.classList.add("popping-up");
         return;
@@ -52,7 +52,7 @@ const signupUser = function () {
             };
             loginRequest.send(JSON.stringify({ "username": `${username}`, "password": `${password}` }));
         }
-        if (signupRequest.status == 403) {
+        if (signupRequest.status == 409) {
             popupText.textContent = this.response;
             popup.classList.add("popping-up");
         }
@@ -62,7 +62,7 @@ const signupUser = function () {
     };
     signupRequest.send(JSON.stringify({ "username": `${username}`, "password": `${password}` }));
 };
-const checkAlphanumeric = function (s) {
+const isAlphanumeric = function (s) {
     const alphaNumRegex = /^[a-zA-Z0-9]*$/;
     return alphaNumRegex.test(s);
 };
