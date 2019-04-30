@@ -134,21 +134,35 @@ aside {
   flex-direction: column;
   align-items: center;
   width: 33%;
-  height: 76vh;
-  border: 1px solid green;
+  min-height: 76vh;
+  border: 1px solid #313638;
+  background-color: #033f63;
+  color: #eaf4d3;
   text-align: center;
 }
 
 .team-member-name {
   margin-top: 10%;
+  margin-bottom: 1%;
+  font-size: 2em;
 }
 
 .team-member-picture {
-  margin: 10% 0;
-  height: 30%;
-  min-height: 13.2vw;
-  width: 40%;
-  border: 1px solid purple;
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+}
+
+.team-picture-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.9;
+  width: 80%;
+  height: 40%;
+  background-color: #313638;
 }
 
 .team-member-description, .team-member-likes, .team-member-dislikes {
