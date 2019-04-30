@@ -102,9 +102,14 @@ func HandleUser() http.HandlerFunc {
 
     if r.Method == "POST" {
       // create a new row in the users table
-      r.ParseForm()
-      username := strings.Join(r.Form["username"], "")
-      password := strings.Join(r.Form["password"], "")
+      decoder := json.NewDecoder(r.Body)
+      var userDetails LoginDetails
+      err := decoder.Decode(&userDetails)
+      if err != nil {
+        log.Printf("can't decode login details", err)
+      }
+      username := userDetails.Username
+      password := userDetails.Password
       hashedpw, err := bcrypt.GenerateFromPassword([]byte(password), 14)
       if err != nil {
         log.Printf("?", err)
@@ -124,7 +129,7 @@ func HandleUser() http.HandlerFunc {
       if err != nil {
         log.Printf("?", err)
       }
-      http.Redirect(w, r, "/index.html", 303)
+      w.Write([]byte("User successfully created!"))
     }
 
     if r.Method == "GET" {
