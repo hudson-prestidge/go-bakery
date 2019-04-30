@@ -15,6 +15,9 @@ const getUserData = function() :void{
     const loginLogoutLink = document.querySelector("#login-logout-link")
     loginLogoutLink.setAttribute("href", "/logout")
     loginLogoutLink.textContent = "Logout"
+
+    const signupLink = <HTMLElement> document.querySelector("#signup-link")
+    signupLink.style.display = "none"
   }
   getUsers.onerror = function(err) {
     console.log(err)

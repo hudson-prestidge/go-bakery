@@ -14,6 +14,8 @@ const getUserData = function () {
         const loginLogoutLink = document.querySelector("#login-logout-link");
         loginLogoutLink.setAttribute("href", "/logout");
         loginLogoutLink.textContent = "Logout";
+        const signupLink = document.querySelector("#signup-link");
+        signupLink.style.display = "none";
     };
     getUsers.onerror = function (err) {
         console.log(err);
