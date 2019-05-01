@@ -3,7 +3,7 @@ package main
 import (
   "log"
   "net/http"
-  "./db"
+  "github.com/hudson-prestidge/go-bakery/Server/db"
   "regexp"
   "os"
 )
