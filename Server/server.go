@@ -5,6 +5,7 @@ import (
   "net/http"
   "./db"
   "regexp"
+  "os"
 )
 
 var fs = http.FileServer(http.Dir("../client/static"))
@@ -19,10 +20,13 @@ func main() {
   mux.HandleFunc("/api/v1/transactions", db.HandleTransactions())
   mux.HandleFunc("/", myfileserver)
 
+  port := os.Getenv("PORT")
+  if port == "" {
+    port = "3000"
+  }
 
-
-  log.Println("Listening on port 3000")
-  http.ListenAndServe(":3000", mux)
+  log.Println("Listening on port " + port)
+  http.ListenAndServe(":" + port, mux)
 }
 
 func myfileserver(w http.ResponseWriter, r *http.Request) {

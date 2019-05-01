@@ -1,6 +1,7 @@
 package db
 
 import(
+  "os"
   "log"
   "database/sql"
   "github.com/lib/pq"
@@ -53,9 +54,19 @@ type IdList struct {
   List string
 }
 
+func CreateDbConnectionString() string {
+  user := os.Getenv("DATABASE_USER")
+  dbname := os.Getenv("DATABASE")
+  password := os.Getenv("DATABASE_PASSWORD")
+  host := os.Getenv("DATABASE_HOST")
+  port := os.Getenv("DATABASE_PORT")
+  connectionString := fmt.Sprintf("user=%s dbname=%s password=%s sslmode=disable host=%s port=%s", user, dbname, password, host, port)
+  return connectionString
+}
+
 func GetProducts() http.HandlerFunc {
   return func(w http.ResponseWriter, r *http.Request){
-    connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
+    connStr := CreateDbConnectionString()
     db, err := sql.Open("postgres", connStr)
     if err != nil {
       log.Printf("?", err)
@@ -93,7 +104,7 @@ func GetProducts() http.HandlerFunc {
 
 func HandleUser() http.HandlerFunc {
   return func(w http.ResponseWriter, r *http.Request) {
-    connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
+    connStr := CreateDbConnectionString()
     db, err := sql.Open("postgres", connStr)
     if err != nil {
       log.Printf("?", err)
@@ -176,7 +187,7 @@ func HandleUser() http.HandlerFunc {
 
 func HandleCart() http.HandlerFunc {
   return func (w http.ResponseWriter, r *http.Request) {
-    connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
+    connStr := CreateDbConnectionString()
     db, err := sql.Open("postgres", connStr)
     if err != nil {
       log.Printf("?", err)
@@ -323,7 +334,7 @@ func UserLogin() http.HandlerFunc {
       }
       username := userDetails.Username
       password := userDetails.Password
-      connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
+      connStr := CreateDbConnectionString()
       db, err := sql.Open("postgres", connStr)
       defer db.Close()
       if err != nil {
@@ -389,7 +400,7 @@ func UserLogout() http.HandlerFunc{
 
 func HandleTransactions() http.HandlerFunc {
   return func(w http.ResponseWriter, r *http.Request) {
-    connStr := "user=postgres dbname=postgres password=test sslmode=disable host=127.0.0.1"
+    connStr := CreateDbConnectionString()
     db, err := sql.Open("postgres", connStr)
     if err != nil {
       log.Printf("Couldn't open database connection: ", err)
