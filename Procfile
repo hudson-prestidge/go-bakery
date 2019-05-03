@@ -1,1 +1,1 @@
-web: Src/server
+web: Src/server.exe
