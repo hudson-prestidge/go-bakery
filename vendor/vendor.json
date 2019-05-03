@@ -1,9 +1,7 @@
 {
 	"comment": "",
 	"heroku": {
-		"install": [
-			"./..."
-		]
+		"goVersion": "go1.12.1"
 	},
 	"ignore": "test",
 	"package": [
@@ -20,14 +18,10 @@
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "pFE860yWOkB+Vi/WqAyJQWyZCcs=",
+			"checksumSHA1": "1BNLPUxkKdL1fPBcD/NuSDGfayk=",
 			"path": "github.com/lib/pq",
-			"revision": "51e2106eed1cea199c802d2a49e91e2491b02056",
-			"revisionTime": "2019-04-15T17:47:12Z"
-		},
-		{
-			"path": "github.com/lib/pq/.",
-			"revision": ""
+			"revision": "7aad666537ab32b76f0966145530335f1fed51fd",
+			"revisionTime": "2019-03-14T17:36:50Z"
 		},
 		{
 			"checksumSHA1": "AU3fA8Sm33Vj9PBoRPSeYfxLRuE=",
