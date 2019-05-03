@@ -33,5 +33,8 @@
 			"revisionTime": "2019-04-26T14:07:02Z"
 		}
 	],
-	"rootPath": "/github.com/go-bakery"
+	"rootPath": "/github.com/hudson-prestidge/go-bakery",
+	"heroku": {
+		"install" : [ "./..." ] 
+	}
 }
