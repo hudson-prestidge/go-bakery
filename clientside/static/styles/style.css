@@ -468,7 +468,7 @@ tbody {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    top: 0;
+    top: 1em;
     margin: 0;
     line-height: 50%;
   }
