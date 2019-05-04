@@ -7,8 +7,7 @@ import (
   "regexp"
   "os"
 )
-
-var fs = http.FileServer(http.Dir("../client/static"))
+var fs = http.FileServer(http.Dir("/app/client/static"))
 
 func main() {
   mux := http.NewServeMux()
