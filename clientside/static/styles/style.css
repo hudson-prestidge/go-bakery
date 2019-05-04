@@ -274,6 +274,7 @@ aside {
 
 #user-display {
   position: relative;
+  text-align: center;
   left: 3em;
   border: 0.1em solid #313638;
   padding: 0.5em 3em;
