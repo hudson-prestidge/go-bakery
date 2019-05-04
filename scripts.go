@@ -11,7 +11,7 @@ func main() {
   if err := tscCmd.Run(); err != nil {
     log.Fatal(err)
   }
-  cmd := exec.Command("sass", "--watch", "/app/client/style.scss", "/app/client/static/styles/style.css")
+  cmd := exec.Command("sass", "--watch", "/app/clientside/style.scss", "/app/clientside/static/styles/style.css")
   if err := cmd.Run(); err != nil {
     log.Fatal(err)
   }
