@@ -10,7 +10,6 @@ import (
 var fs = http.FileServer(http.Dir("/app/clientside/static"))
 
 func main() {
-  log.Printf("cwd: ", dir)
   mux := http.NewServeMux()
   mux.HandleFunc("/api/v1/products", db.GetProducts())
   mux.HandleFunc("/api/v1/users", db.HandleUser())
