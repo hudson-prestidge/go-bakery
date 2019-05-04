@@ -7,7 +7,7 @@ import (
   "regexp"
   "os"
 )
-var fs = http.FileServer(http.Dir("/app/clientsideside/static"))
+var fs = http.FileServer(http.Dir("/app/clientside/static"))
 
 func main() {
   log.Printf("cwd: ", dir)
